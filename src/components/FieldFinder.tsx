@@ -3,11 +3,15 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, Search, MapPin, Navigation, Clock, Star } from "lucide-react";
+import { Calendar, Search, MapPin, Navigation, Clock, Star, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const FieldFinder = () => {
+  const { toast } = useToast();
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationEnabled, setLocationEnabled] = useState(false);
+  const [bookingFields, setBookingFields] = useState<number[]>([]);
+  const [bookedFields, setBookedFields] = useState<number[]>([]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -26,6 +30,22 @@ const FieldFinder = () => {
       );
     }
   }, []);
+
+  const handleBookField = (index: number, fieldName: string, time: string) => {
+    setBookingFields(prev => [...prev, index]);
+    
+    // Simulate booking delay
+    setTimeout(() => {
+      setBookingFields(prev => prev.filter(id => id !== index));
+      setBookedFields(prev => [...prev, index]);
+      
+      toast({
+        title: "Field Booked Successfully! 🏟️",
+        description: `${fieldName} is reserved for ${time}. Ready to play!`,
+        duration: 4000,
+      });
+    }, 2000);
+  };
 
   // Mock fields with distances (would be calculated from user location in real app)
   const availableFields = [
@@ -191,9 +211,24 @@ const FieldFinder = () => {
               <div className="flex space-x-2">
                 <Button 
                   className="flex-1 hover-scale" 
-                  disabled={field.status !== "Available"}
+                  disabled={field.status !== "Available" || bookingFields.includes(index) || bookedFields.includes(index)}
+                  onClick={() => field.status === "Available" && handleBookField(index, field.name, field.available)}
                 >
-                  {field.status === "Available" ? "Book Now" : "Join Waitlist"}
+                  {bookingFields.includes(index) ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Booking...
+                    </>
+                  ) : bookedFields.includes(index) ? (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Booked
+                    </>
+                  ) : field.status === "Available" ? (
+                    "Book Now"
+                  ) : (
+                    "Join Waitlist"
+                  )}
                 </Button>
                 <Button variant="outline" className="hover-scale">
                   <MapPin className="h-4 w-4" />

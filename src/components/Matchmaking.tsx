@@ -1,10 +1,49 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, User, Volleyball } from "lucide-react";
+import { Users, User, Volleyball, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const Matchmaking = () => {
+  const { toast } = useToast();
+  const [connectingPlayers, setConnectingPlayers] = useState<number[]>([]);
+  const [connectedPlayers, setConnectedPlayers] = useState<number[]>([]);
+  const [joiningGroups, setJoiningGroups] = useState<number[]>([]);
+  const [joinedGroups, setJoinedGroups] = useState<number[]>([]);
+
+  const handleConnectPlayer = (index: number, playerName: string) => {
+    setConnectingPlayers(prev => [...prev, index]);
+    
+    // Simulate connection delay
+    setTimeout(() => {
+      setConnectingPlayers(prev => prev.filter(id => id !== index));
+      setConnectedPlayers(prev => [...prev, index]);
+      
+      toast({
+        title: "Connected Successfully! 🎾",
+        description: `You're now connected with ${playerName}. Ready to play!`,
+        duration: 3000,
+      });
+    }, 1500);
+  };
+
+  const handleJoinGroup = (index: number, groupName: string) => {
+    setJoiningGroups(prev => [...prev, index]);
+    
+    // Simulate join delay
+    setTimeout(() => {
+      setJoiningGroups(prev => prev.filter(id => id !== index));
+      setJoinedGroups(prev => [...prev, index]);
+      
+      toast({
+        title: "Joined Group! 🏃‍♂️",
+        description: `Welcome to ${groupName}. Check your schedule for upcoming events!`,
+        duration: 3000,
+      });
+    }, 1000);
+  };
+
   const activePlayers = [
     {
       name: "Sarah Martinez",
@@ -108,8 +147,24 @@ const Matchmaking = () => {
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4 hover-scale">
-                  Connect
+                <Button 
+                  className="w-full mt-4 hover-scale"
+                  onClick={() => handleConnectPlayer(index, player.name)}
+                  disabled={connectingPlayers.includes(index) || connectedPlayers.includes(index)}
+                >
+                  {connectingPlayers.includes(index) ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Connecting...
+                    </>
+                  ) : connectedPlayers.includes(index) ? (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Connected
+                    </>
+                  ) : (
+                    "Connect"
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -145,8 +200,24 @@ const Matchmaking = () => {
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4 hover-scale">
-                  Join Group
+                <Button 
+                  className="w-full mt-4 hover-scale"
+                  onClick={() => handleJoinGroup(index, group.name)}
+                  disabled={joiningGroups.includes(index) || joinedGroups.includes(index)}
+                >
+                  {joiningGroups.includes(index) ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Joining...
+                    </>
+                  ) : joinedGroups.includes(index) ? (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Joined
+                    </>
+                  ) : (
+                    "Join Group"
+                  )}
                 </Button>
               </CardContent>
             </Card>
