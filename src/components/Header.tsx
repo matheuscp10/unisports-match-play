@@ -1,11 +1,21 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { User, Search, Menu } from "lucide-react";
+import { User, Search, Menu, LogOut, Settings, Bell } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SearchModal from "./SearchModal";
 import SignInModal from "./SignInModal";
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName] = useState("John Doe");
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -40,12 +50,48 @@ const Header = () => {
             </Button>
           </SearchModal>
           
-          <SignInModal>
-            <Button variant="outline" size="sm" className="hover-scale">
-              <User className="h-4 w-4 mr-2" />
-              Sign In
-            </Button>
-          </SignInModal>
+          {isLoggedIn ? (
+            <>
+              <Button variant="ghost" size="sm" className="hover-scale">
+                <Bell className="h-4 w-4" />
+              </Button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-blue-500 text-white text-sm">
+                        {userName.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden md:block">{userName}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem>
+                    <User className="h-4 w-4 mr-2" />
+                    My Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <SignInModal>
+              <Button variant="outline" size="sm" className="hover-scale">
+                <User className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+            </SignInModal>
+          )}
 
           {/* Mobile Menu */}
           <Sheet>
@@ -68,6 +114,14 @@ const Header = () => {
                 <a href="#matchmaking" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Players
                 </a>
+                {!isLoggedIn && (
+                  <SignInModal>
+                    <Button variant="outline" className="mt-4">
+                      <User className="h-4 w-4 mr-2" />
+                      Sign In
+                    </Button>
+                  </SignInModal>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
