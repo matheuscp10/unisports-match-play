@@ -1,9 +1,10 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy, User, Calendar } from "lucide-react";
+import { Trophy, User, Calendar, Crown } from "lucide-react";
 import LeagueStatistics from "./LeagueStatistics";
 import PlayerStats from "./PlayerStats";
 import MyBookings from "./MyBookings";
+import CoachingServices from "./CoachingServices";
 
 const Statistics = () => {
   return (
@@ -13,7 +14,7 @@ const Statistics = () => {
       </div>
 
       <Tabs defaultValue="leagues" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-black/40 border border-green-800/40">
+        <TabsList className="grid w-full grid-cols-4 bg-black/40 border border-green-800/40">
           <TabsTrigger value="leagues" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
             <Trophy className="h-4 w-4" />
             League Stats
@@ -25,6 +26,10 @@ const Statistics = () => {
           <TabsTrigger value="bookings" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
             <Calendar className="h-4 w-4" />
             My Bookings
+          </TabsTrigger>
+          <TabsTrigger value="coaching" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
+            <Crown className="h-4 w-4" />
+            Coaching
           </TabsTrigger>
         </TabsList>
 
@@ -38,6 +43,10 @@ const Statistics = () => {
         
         <TabsContent value="bookings">
           <MyBookings />
+        </TabsContent>
+        
+        <TabsContent value="coaching">
+          <CoachingServices />
         </TabsContent>
       </Tabs>
     </div>
