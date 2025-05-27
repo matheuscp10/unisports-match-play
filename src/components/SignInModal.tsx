@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Mail, Lock, UserPlus, CheckCircle, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, UserPlus, CheckCircle, Eye, EyeOff, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface SignInModalProps {
@@ -36,7 +36,6 @@ const SignInModal = ({ children }: SignInModalProps) => {
     }
 
     setIsLoading(true);
-    // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       setIsLoggedIn(true);
@@ -46,10 +45,7 @@ const SignInModal = ({ children }: SignInModalProps) => {
       });
       setTimeout(() => {
         setOpen(false);
-        // Reset form
-        setEmail("");
-        setPassword("");
-        setIsLoggedIn(false);
+        resetForm();
       }, 2000);
     }, 1500);
   };
@@ -74,24 +70,26 @@ const SignInModal = ({ children }: SignInModalProps) => {
       return;
     }
 
+    if (password.length < 8) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 8 characters long",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsLoading(true);
-    // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       setIsLoggedIn(true);
       toast({
-        title: "Account created!",
-        description: "Welcome to UniSports! Your account has been created successfully.",
+        title: "Account created successfully!",
+        description: "Welcome to UniSports! Your account has been created and you are now signed in.",
       });
       setTimeout(() => {
         setOpen(false);
-        // Reset form
-        setName("");
-        setUniversity("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setIsLoggedIn(false);
+        resetForm();
       }, 2000);
     }, 1500);
   };
@@ -104,6 +102,7 @@ const SignInModal = ({ children }: SignInModalProps) => {
     setConfirmPassword("");
     setIsLoggedIn(false);
     setIsLoading(false);
+    setShowPassword(false);
   };
 
   return (
@@ -134,18 +133,27 @@ const SignInModal = ({ children }: SignInModalProps) => {
             
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="signin" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Sign In
+                </TabsTrigger>
+                <TabsTrigger value="signup" className="flex items-center gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Sign Up
+                </TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin" className="space-y-4">
+                <div className="text-center text-sm text-gray-600 mb-4">
+                  Sign in to your existing account
+                </div>
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="signin-email">Email Address</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
-                        id="email"
+                        id="signin-email"
                         type="email"
                         placeholder="your.email@university.edu"
                         value={email}
@@ -157,13 +165,13 @@ const SignInModal = ({ children }: SignInModalProps) => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="signin-password">Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
-                        id="password"
+                        id="signin-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
+                        placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10 pr-10"
@@ -180,7 +188,17 @@ const SignInModal = ({ children }: SignInModalProps) => {
                   </div>
                   
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        <LogIn className="h-4 w-4 mr-2" />
+                        Sign In
+                      </>
+                    )}
                   </Button>
                 </form>
                 
@@ -190,11 +208,14 @@ const SignInModal = ({ children }: SignInModalProps) => {
               </TabsContent>
               
               <TabsContent value="signup" className="space-y-4">
+                <div className="text-center text-sm text-gray-600 mb-4">
+                  Create a new UniSports account
+                </div>
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="signup-name">Full Name</Label>
                     <Input
-                      id="name"
+                      id="signup-name"
                       placeholder="John Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -203,9 +224,9 @@ const SignInModal = ({ children }: SignInModalProps) => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="university">University</Label>
+                    <Label htmlFor="signup-university">University</Label>
                     <Input
-                      id="university"
+                      id="signup-university"
                       placeholder="University of California"
                       value={university}
                       onChange={(e) => setUniversity(e.target.value)}
@@ -214,7 +235,7 @@ const SignInModal = ({ children }: SignInModalProps) => {
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">Email Address</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
@@ -236,7 +257,7 @@ const SignInModal = ({ children }: SignInModalProps) => {
                       <Input
                         id="signup-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
+                        placeholder="Create a strong password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="pl-10 pr-10"
@@ -250,16 +271,19 @@ const SignInModal = ({ children }: SignInModalProps) => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
+                    <div className="text-xs text-gray-500">
+                      Password must be at least 8 characters long
+                    </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Label htmlFor="signup-confirm-password">Confirm Password</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
-                        id="confirm-password"
+                        id="signup-confirm-password"
                         type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
+                        placeholder="Confirm your password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="pl-10"
@@ -270,7 +294,10 @@ const SignInModal = ({ children }: SignInModalProps) => {
                   
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (
-                      "Creating account..."
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Creating account...
+                      </>
                     ) : (
                       <>
                         <UserPlus className="h-4 w-4 mr-2" />

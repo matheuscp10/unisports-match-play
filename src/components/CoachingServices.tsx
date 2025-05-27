@@ -6,10 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Crown, MessageCircle, User, Bot, Dumbbell, Apple, Clock, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import PurchaseFlow from "./PurchaseFlow";
 
 const CoachingServices = () => {
   const { toast } = useToast();
   const [hasSubscription, setHasSubscription] = useState(false);
+  const [showPurchaseFlow, setShowPurchaseFlow] = useState(false);
   const [chatMessages, setChatMessages] = useState<{trainer: any[], nutritionist: any[]}>({
     trainer: [
       { type: 'coach', message: 'Hello! I\'m your personal trainer. Ready to crush your fitness goals?', time: '2 min ago' }
@@ -21,13 +23,9 @@ const CoachingServices = () => {
   const [newMessage, setNewMessage] = useState('');
   const [activeChat, setActiveChat] = useState<'trainer' | 'nutritionist'>('trainer');
 
-  const handleSubscribe = () => {
+  const handlePurchaseSuccess = () => {
     setHasSubscription(true);
-    toast({
-      title: "Welcome to Premium Coaching! 🎉",
-      description: "You now have access to expert trainers and nutritionists.",
-      duration: 3000,
-    });
+    setShowPurchaseFlow(false);
   };
 
   const handleSendMessage = () => {
@@ -39,7 +37,6 @@ const CoachingServices = () => {
       [activeChat]: [...prev[activeChat], userMessage]
     }));
 
-    // Simulate response
     setTimeout(() => {
       const responses = {
         trainer: hasSubscription 
@@ -59,6 +56,15 @@ const CoachingServices = () => {
 
     setNewMessage('');
   };
+
+  if (showPurchaseFlow) {
+    return (
+      <PurchaseFlow 
+        onBack={() => setShowPurchaseFlow(false)}
+        onSuccess={handlePurchaseSuccess}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -102,7 +108,7 @@ const CoachingServices = () => {
                 </div>
               </div>
               <Button 
-                onClick={handleSubscribe}
+                onClick={() => setShowPurchaseFlow(true)}
                 className="bg-green-700 hover:bg-green-600 text-white"
               >
                 <Crown className="h-4 w-4 mr-2" />
