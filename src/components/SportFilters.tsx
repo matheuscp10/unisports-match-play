@@ -100,27 +100,27 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
   };
 
   return (
-    <Card className="bg-black/40 border-green-800/40 mb-6">
+    <Card className="bg-black/50 border-green-700/50 mb-6">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-white">
-          <Filter className="h-5 w-5 text-green-400" />
+          <Filter className="h-5 w-5 text-green-300" />
           Filter Sports Results
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid md:grid-cols-3 gap-4 mb-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               Country
             </label>
             <Select value={selectedCountry} onValueChange={handleCountryChange}>
-              <SelectTrigger className="bg-black/20 border-green-800/40 text-white">
+              <SelectTrigger className="bg-black/30 border-green-700/50 text-white">
                 <SelectValue placeholder="Select country" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-black border-green-700/50">
                 {countries.map((country) => (
-                  <SelectItem key={country} value={country}>
+                  <SelectItem key={country} value={country} className="text-white hover:bg-green-800/30">
                     {country}
                   </SelectItem>
                 ))}
@@ -129,7 +129,7 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+            <label className="text-sm font-medium text-gray-200 flex items-center gap-2">
               <School className="h-4 w-4" />
               University
             </label>
@@ -138,12 +138,12 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
               onValueChange={setSelectedUniversity}
               disabled={!selectedCountry}
             >
-              <SelectTrigger className="bg-black/20 border-green-800/40 text-white">
+              <SelectTrigger className="bg-black/30 border-green-700/50 text-white">
                 <SelectValue placeholder="Select university" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-black border-green-700/50">
                 {selectedCountry && universities[selectedCountry as keyof typeof universities]?.map((university) => (
-                  <SelectItem key={university} value={university}>
+                  <SelectItem key={university} value={university} className="text-white hover:bg-green-800/30">
                     {university}
                   </SelectItem>
                 ))}
@@ -152,14 +152,14 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">Sport</label>
+            <label className="text-sm font-medium text-gray-200">Sport</label>
             <Select value={selectedSport} onValueChange={setSelectedSport}>
-              <SelectTrigger className="bg-black/20 border-green-800/40 text-white">
+              <SelectTrigger className="bg-black/30 border-green-700/50 text-white">
                 <SelectValue placeholder="Select sport" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-black border-green-700/50">
                 {sports.map((sport) => (
-                  <SelectItem key={sport} value={sport}>
+                  <SelectItem key={sport} value={sport} className="text-white hover:bg-green-800/30">
                     {sport}
                   </SelectItem>
                 ))}
@@ -171,7 +171,7 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
         <div className="flex gap-2">
           <Button 
             onClick={handleApplyFilters}
-            className="bg-green-700 hover:bg-green-600 text-white"
+            className="bg-green-800 hover:bg-green-700 text-white"
             disabled={!selectedCountry && !selectedUniversity && !selectedSport}
           >
             Apply Filters
@@ -179,15 +179,15 @@ const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
           <Button 
             onClick={handleClearFilters}
             variant="outline"
-            className="border-green-800/40 text-green-400 hover:bg-green-800/20"
+            className="border-green-700/50 text-green-300 hover:bg-green-800/20"
           >
             Clear All
           </Button>
         </div>
 
         {(selectedCountry || selectedUniversity || selectedSport) && (
-          <div className="mt-4 p-3 bg-green-900/20 rounded-lg border border-green-800/40">
-            <div className="text-sm text-green-400">
+          <div className="mt-4 p-3 bg-green-900/30 rounded-lg border border-green-700/50">
+            <div className="text-sm text-green-300">
               Active filters: {[selectedCountry, selectedUniversity, selectedSport].filter(Boolean).join(", ")}
             </div>
           </div>

@@ -14,35 +14,35 @@
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 120 100% 20%;
+    --primary: 120 60% 15%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 16%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 75%;
 
-    --accent: 120 100% 15%;
+    --accent: 120 40% 20%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
+    --border: 120 20% 25%;
     --input: 0 0% 20%;
-    --ring: 120 100% 25%;
+    --ring: 120 60% 30%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 6%;
     --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 120 100% 20%;
+    --sidebar-primary: 120 60% 15%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 0 0% 14%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 120 100% 25%;
+    --sidebar-border: 120 20% 25%;
+    --sidebar-ring: 120 60% 30%;
   }
 
   .dark {
@@ -55,32 +55,32 @@
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 120 100% 20%;
+    --primary: 120 60% 15%;
     --primary-foreground: 0 0% 98%;
 
     --secondary: 0 0% 16%;
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 65%;
+    --muted-foreground: 0 0% 75%;
 
-    --accent: 120 100% 15%;
+    --accent: 120 40% 20%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
+    --border: 120 20% 25%;
     --input: 0 0% 20%;
-    --ring: 120 100% 25%;
+    --ring: 120 60% 30%;
     --sidebar-background: 0 0% 6%;
     --sidebar-foreground: 0 0% 85%;
-    --sidebar-primary: 120 100% 20%;
+    --sidebar-primary: 120 60% 15%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 0 0% 14%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 120 100% 25%;
+    --sidebar-border: 120 20% 25%;
+    --sidebar-ring: 120 60% 30%;
   }
 }
 
@@ -91,7 +91,7 @@
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(0 0% 5%) 100%);
+    background: linear-gradient(135deg, hsl(0 0% 8%) 0%, hsl(120 20% 5%) 100%);
     min-height: 100vh;
   }
 }

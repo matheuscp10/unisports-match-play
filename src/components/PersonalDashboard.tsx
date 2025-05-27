@@ -7,22 +7,22 @@ import CoachingServices from "./CoachingServices";
 
 const PersonalDashboard = () => {
   return (
-    <div className="space-y-8 bg-black/20 rounded-lg p-6 border border-green-800/30">
+    <div className="space-y-8 bg-black/30 rounded-lg p-6 border border-green-700/40">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-white">Personal Dashboard</h2>
       </div>
 
       <Tabs defaultValue="stats" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-black/40 border border-green-800/40">
-          <TabsTrigger value="stats" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
+        <TabsList className="grid w-full grid-cols-3 bg-black/50 border border-green-700/50">
+          <TabsTrigger value="stats" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
             <User className="h-4 w-4" />
             My Stats
           </TabsTrigger>
-          <TabsTrigger value="bookings" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
+          <TabsTrigger value="bookings" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
             <Calendar className="h-4 w-4" />
             My Bookings
           </TabsTrigger>
-          <TabsTrigger value="coaching" className="flex items-center gap-2 data-[state=active]:bg-green-700 data-[state=active]:text-white text-green-400">
+          <TabsTrigger value="coaching" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
             <Crown className="h-4 w-4" />
             Coaching
           </TabsTrigger>
