@@ -37,7 +37,7 @@ const Statistics = () => {
 
         <TabsContent value="league-stats" className="space-y-6">
           <SportFilters onFiltersChange={handleFiltersChange} />
-          <LeagueStatistics />
+          <LeagueStatistics activeFilters={activeFilters} />
           {activeFilters.country && (
             <div className="text-center text-sm text-gray-300 mt-4">
               Showing results for {activeFilters.sport && `${activeFilters.sport} in `}
