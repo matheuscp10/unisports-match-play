@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,8 +7,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Flag, Eye, Bell, Share2, Clock, TrendingUp } from "lucide-react";
 import MatchDetails from "./MatchDetails";
 import SportFilters from "./SportFilters";
+import { useToast } from "@/hooks/use-toast";
 
 const LiveScores = () => {
+  const { toast } = useToast();
   const [followedMatches, setFollowedMatches] = useState<number[]>([]);
   const [activeFilters, setActiveFilters] = useState({
     country: "",
@@ -194,15 +195,35 @@ const LiveScores = () => {
   const filteredRecentResults = filterMatches(recentResults);
 
   const toggleFollow = (matchId: number) => {
-    setFollowedMatches(prev => 
-      prev.includes(matchId) 
-        ? prev.filter(id => id !== matchId)
-        : [...prev, matchId]
-    );
+    const isCurrentlyFollowed = followedMatches.includes(matchId);
+    
+    if (isCurrentlyFollowed) {
+      setFollowedMatches(prev => prev.filter(id => id !== matchId));
+      // Save to localStorage
+      const updatedFollowed = followedMatches.filter(id => id !== matchId);
+      localStorage.setItem('followedMatches', JSON.stringify(updatedFollowed));
+      
+      toast({
+        title: "Match Unfollowed",
+        description: "You will no longer receive notifications for this match.",
+        duration: 3000,
+      });
+    } else {
+      setFollowedMatches(prev => [...prev, matchId]);
+      // Save to localStorage
+      const updatedFollowed = [...followedMatches, matchId];
+      localStorage.setItem('followedMatches', JSON.stringify(updatedFollowed));
+      
+      toast({
+        title: "Match Followed! 🔔",
+        description: "You'll receive notifications about this match.",
+        duration: 3000,
+      });
+    }
   };
 
   const MatchCard = ({ match, showScore = true }: { match: any, showScore?: boolean }) => (
-    <Card className="hover-scale transition-all duration-300 hover:shadow-lg bg-black/50 border-green-700/50">
+    <Card className="hover-scale transition-all duration-300 hover:shadow-lg bg-white border-green-700/50">
       <CardContent className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-4">
@@ -212,20 +233,20 @@ const LiveScores = () => {
             >
               {match.sport}
             </Badge>
-            <span className="text-sm text-gray-300">{match.time}</span>
+            <span className="text-sm text-black font-medium">{match.time}</span>
             {match.league && (
-              <Badge variant="outline" className="text-xs border-green-700/50 text-green-300">{match.league}</Badge>
+              <Badge variant="outline" className="text-xs border-green-700/50 text-green-700 bg-green-50">{match.league}</Badge>
             )}
           </div>
           <div className="flex items-center gap-2">
             {match.quarter && (
-              <Badge variant="outline" className="border-green-700/50 text-green-300">{match.quarter}</Badge>
+              <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{match.quarter}</Badge>
             )}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => toggleFollow(match.id)}
-              className={followedMatches.includes(match.id) ? "text-green-400" : "text-gray-400 hover:text-green-400"}
+              className={followedMatches.includes(match.id) ? "text-green-600 hover:text-green-700" : "text-gray-600 hover:text-green-600"}
             >
               <Bell className={`h-4 w-4 ${followedMatches.includes(match.id) ? "fill-current" : ""}`} />
             </Button>
@@ -234,26 +255,26 @@ const LiveScores = () => {
 
         <div className="grid grid-cols-3 gap-4 items-center">
           <div className="text-right">
-            <div className="font-semibold text-lg text-white">{match.team1}</div>
+            <div className="font-semibold text-lg text-black">{match.team1}</div>
           </div>
           
           <div className="text-center">
             {showScore ? (
-              <div className="text-3xl font-bold text-green-400">
+              <div className="text-3xl font-bold text-green-600">
                 {match.score1} - {match.score2}
               </div>
             ) : (
-              <div className="text-lg font-semibold text-gray-400">vs</div>
+              <div className="text-lg font-semibold text-gray-600">vs</div>
             )}
           </div>
           
           <div className="text-left">
-            <div className="font-semibold text-lg text-white">{match.team2}</div>
+            <div className="font-semibold text-lg text-black">{match.team2}</div>
           </div>
         </div>
 
         {match.venue && (
-          <div className="mt-3 text-center text-sm text-gray-400">
+          <div className="mt-3 text-center text-sm text-gray-700 font-medium">
             📍 {match.venue}
           </div>
         )}
@@ -261,17 +282,17 @@ const LiveScores = () => {
         <div className="flex justify-center gap-2 mt-4">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="border-green-700/50 text-green-300 hover:bg-green-800/20">
+              <Button variant="outline" size="sm" className="border-green-700/50 text-green-700 hover:bg-green-50">
                 <Eye className="h-4 w-4 mr-2" />
                 View Details
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-black border-green-700/50">
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-green-700/50">
               <MatchDetails match={match} />
             </DialogContent>
           </Dialog>
           
-          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-green-400">
+          <Button variant="ghost" size="sm" className="text-gray-600 hover:text-green-600">
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
@@ -281,10 +302,10 @@ const LiveScores = () => {
   );
 
   return (
-    <div className="space-y-6 bg-black/30 rounded-lg p-6 border border-green-700/40">
+    <div className="space-y-6 bg-white/95 rounded-lg p-6 border border-green-700/40 shadow-lg">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-white">Live Scores</h2>
-        <Badge variant="secondary" className="animate-pulse bg-red-500/20 text-red-400 border-red-500/50">
+        <h2 className="text-3xl font-bold text-black">Live Scores</h2>
+        <Badge variant="secondary" className="animate-pulse bg-red-100 text-red-600 border-red-300">
           <Flag className="h-3 w-3 mr-1" />
           {filteredLiveMatches.length} Live
         </Badge>
@@ -293,23 +314,23 @@ const LiveScores = () => {
       <SportFilters onFiltersChange={handleFiltersChange} />
 
       {activeFilters.country && (
-        <div className="text-center text-sm text-gray-300 mt-4">
+        <div className="text-center text-sm text-black font-medium mt-4 bg-white/80 p-2 rounded border border-green-200">
           Showing results for {activeFilters.sport && `${activeFilters.sport} in `}
           {activeFilters.university ? activeFilters.university : activeFilters.country}
         </div>
       )}
 
       <Tabs defaultValue="live" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-black/50 border border-green-700/50">
-          <TabsTrigger value="live" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
+        <TabsList className="grid w-full grid-cols-3 bg-gray-100 border border-green-700/50">
+          <TabsTrigger value="live" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">
             <Flag className="h-4 w-4" />
             Live ({filteredLiveMatches.length})
           </TabsTrigger>
-          <TabsTrigger value="upcoming" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
+          <TabsTrigger value="upcoming" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">
             <Clock className="h-4 w-4" />
             Upcoming ({filteredUpcomingMatches.length})
           </TabsTrigger>
-          <TabsTrigger value="results" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">
+          <TabsTrigger value="results" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">
             <TrendingUp className="h-4 w-4" />
             Results ({filteredRecentResults.length})
           </TabsTrigger>
@@ -321,7 +342,7 @@ const LiveScores = () => {
               <MatchCard key={match.id} match={match} />
             ))
           ) : (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-black py-8 bg-white/80 rounded border border-green-200">
               No live matches found for the selected filters.
             </div>
           )}
@@ -333,7 +354,7 @@ const LiveScores = () => {
               <MatchCard key={match.id} match={match} showScore={false} />
             ))
           ) : (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-black py-8 bg-white/80 rounded border border-green-200">
               No upcoming matches found for the selected filters.
             </div>
           )}
@@ -345,7 +366,7 @@ const LiveScores = () => {
               <MatchCard key={match.id} match={match} />
             ))
           ) : (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-black py-8 bg-white/80 rounded border border-green-200">
               No recent results found for the selected filters.
             </div>
           )}

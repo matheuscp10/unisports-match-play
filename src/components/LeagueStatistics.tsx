@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,21 +65,54 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
     }
   ];
 
-  const nationalCup = {
-    currentRound: "Quarter Finals",
-    sport: "Basketball",
-    matches: [
-      { team1: "Stanford Cardinals", team2: "MIT Eagles", date: "March 15", venue: "Madison Square Garden", country: "United States" },
-      { team1: "UCLA Bruins", team2: "Harvard Crimson", date: "March 15", venue: "United Center", country: "United States" },
-      { team1: "Duke Blue Devils", team2: "North Carolina", date: "March 16", venue: "Staples Center", country: "United States" },
-      { team1: "Kentucky Wildcats", team2: "Kansas Jayhawks", date: "March 16", venue: "TD Garden", country: "United States" }
-    ],
-    pastResults: [
-      { round: "Round of 16", team1: "Stanford Cardinals", score1: 89, team2: "Villanova Wildcats", score2: 76, country: "United States" },
-      { round: "Round of 16", team1: "MIT Eagles", score1: 82, team2: "Georgetown Hoyas", score2: 78, country: "United States" },
-      { round: "Round of 16", team1: "UCLA Bruins", score1: 91, team2: "Syracuse Orange", score2: 85, country: "United States" },
-      { round: "Round of 16", team1: "Harvard Crimson", score1: 79, team2: "Marquette Eagles", score2: 74, country: "United States" }
-    ]
+  const nationalCups = {
+    "Basketball": {
+      currentRound: "Quarter Finals",
+      matches: [
+        { team1: "Stanford Cardinals", team2: "MIT Eagles", date: "March 15", venue: "Madison Square Garden", country: "United States" },
+        { team1: "UCLA Bruins", team2: "Harvard Crimson", date: "March 15", venue: "United Center", country: "United States" },
+        { team1: "Duke Blue Devils", team2: "North Carolina", date: "March 16", venue: "Staples Center", country: "United States" },
+        { team1: "Kentucky Wildcats", team2: "Kansas Jayhawks", date: "March 16", venue: "TD Garden", country: "United States" }
+      ],
+      pastResults: [
+        { round: "Round of 16", team1: "Stanford Cardinals", score1: 89, team2: "Villanova Wildcats", score2: 76, country: "United States" },
+        { round: "Round of 16", team1: "MIT Eagles", score1: 82, team2: "Georgetown Hoyas", score2: 78, country: "United States" },
+        { round: "Round of 16", team1: "UCLA Bruins", score1: 91, team2: "Syracuse Orange", score2: 85, country: "United States" },
+        { round: "Round of 16", team1: "Harvard Crimson", score1: 79, team2: "Marquette Eagles", score2: 74, country: "United States" }
+      ]
+    },
+    "Football (Soccer)": {
+      currentRound: "Semi Finals",
+      matches: [
+        { team1: "Oxford Blues", team2: "Cambridge Light Blues", date: "April 20", venue: "Wembley Stadium", country: "United Kingdom" },
+        { team1: "Imperial Lions", team2: "UCL Bears", date: "April 20", venue: "Old Trafford", country: "United Kingdom" }
+      ],
+      pastResults: [
+        { round: "Quarter Finals", team1: "Oxford Blues", score1: 2, team2: "King's Eagles", score2: 0, country: "United Kingdom" },
+        { round: "Quarter Finals", team1: "Cambridge Light Blues", score1: 3, team2: "Edinburgh Scots", score2: 1, country: "United Kingdom" }
+      ]
+    },
+    "Tennis": {
+      currentRound: "Finals",
+      matches: [
+        { team1: "Toronto Varsity Blues", team2: "McGill Redbirds", date: "May 15", venue: "Rogers Cup Centre", country: "Canada" }
+      ],
+      pastResults: [
+        { round: "Semi Finals", team1: "Toronto Varsity Blues", score1: 6, team2: "UBC Thunderbirds", score2: 3, country: "Canada" },
+        { round: "Semi Finals", team1: "McGill Redbirds", score1: 6, team2: "Alberta Golden Bears", score2: 2, country: "Canada" }
+      ]
+    },
+    "Volleyball": {
+      currentRound: "Quarter Finals",
+      matches: [
+        { team1: "UCLA Bruins", team2: "USC Trojans", date: "March 25", venue: "Pauley Pavilion", country: "United States" },
+        { team1: "Stanford Cardinals", team2: "Berkeley Bears", date: "March 25", venue: "Maples Pavilion", country: "United States" }
+      ],
+      pastResults: [
+        { round: "Round of 16", team1: "UCLA Bruins", score1: 3, team2: "Oregon Ducks", score2: 1, country: "United States" },
+        { round: "Round of 16", team1: "USC Trojans", score1: 3, team2: "Arizona Wildcats", score2: 0, country: "United States" }
+      ]
+    }
   };
 
   const filterLeagues = () => {
@@ -104,56 +136,58 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
   };
 
   const filteredLeagues = filterLeagues();
-  const showNationalCup = !activeFilters.sport || nationalCup.sport === activeFilters.sport;
+  const currentNationalCup = activeFilters.sport && nationalCups[activeFilters.sport as keyof typeof nationalCups] 
+    ? nationalCups[activeFilters.sport as keyof typeof nationalCups] 
+    : nationalCups["Basketball"];
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-white">League Statistics</h2>
-        <Badge variant="secondary" className="animate-pulse bg-green-800/30 text-green-300 border-green-700/50">
+        <h2 className="text-3xl font-bold text-black">League Statistics</h2>
+        <Badge variant="secondary" className="animate-pulse bg-green-100 text-green-700 border-green-300">
           <Trophy className="h-3 w-3 mr-1" />
           Season 2024
         </Badge>
       </div>
 
       <Tabs defaultValue="leagues" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 bg-black/50 border border-green-700/50">
-          <TabsTrigger value="leagues" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">University Leagues</TabsTrigger>
-          <TabsTrigger value="national" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-green-300">National Cup</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 bg-gray-100 border border-green-700/50">
+          <TabsTrigger value="leagues" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">University Leagues</TabsTrigger>
+          <TabsTrigger value="national" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">National Cup</TabsTrigger>
         </TabsList>
 
         <TabsContent value="leagues" className="space-y-6">
           {filteredLeagues.length > 0 ? (
             filteredLeagues.map((conference, index) => (
-              <Card key={index} className="hover-scale bg-black/50 border-green-700/50">
+              <Card key={index} className="hover-scale bg-white border-green-700/50">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-white">
-                    <Medal className="h-5 w-5 text-green-400" />
+                  <CardTitle className="flex items-center gap-2 text-black">
+                    <Medal className="h-5 w-5 text-green-600" />
                     {conference.league} - {conference.sport}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
-                      <TableRow className="border-green-700/50">
-                        <TableHead className="text-gray-300">Rank</TableHead>
-                        <TableHead className="text-gray-300">Team</TableHead>
-                        <TableHead className="text-gray-300">W</TableHead>
-                        <TableHead className="text-gray-300">L</TableHead>
-                        <TableHead className="text-gray-300">Points</TableHead>
-                        <TableHead className="text-gray-300">Last Match</TableHead>
+                      <TableRow className="border-green-200">
+                        <TableHead className="text-black font-semibold">Rank</TableHead>
+                        <TableHead className="text-black font-semibold">Team</TableHead>
+                        <TableHead className="text-black font-semibold">W</TableHead>
+                        <TableHead className="text-black font-semibold">L</TableHead>
+                        <TableHead className="text-black font-semibold">Points</TableHead>
+                        <TableHead className="text-black font-semibold">Last Match</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {conference.teams.map((team, teamIndex) => (
-                        <TableRow key={teamIndex} className="border-green-700/50">
-                          <TableCell className="font-bold text-white">{teamIndex + 1}</TableCell>
-                          <TableCell className="font-semibold text-white">{team.name}</TableCell>
-                          <TableCell className="text-green-400">{team.wins}</TableCell>
-                          <TableCell className="text-red-400">{team.losses}</TableCell>
-                          <TableCell className="font-bold text-green-400">{team.points}</TableCell>
+                        <TableRow key={teamIndex} className="border-green-100">
+                          <TableCell className="font-bold text-black">{teamIndex + 1}</TableCell>
+                          <TableCell className="font-semibold text-black">{team.name}</TableCell>
+                          <TableCell className="text-green-600 font-semibold">{team.wins}</TableCell>
+                          <TableCell className="text-red-600 font-semibold">{team.losses}</TableCell>
+                          <TableCell className="font-bold text-green-600">{team.points}</TableCell>
                           <TableCell>
-                            <Badge variant={team.lastMatch.startsWith('W') ? 'default' : 'secondary'} className={team.lastMatch.startsWith('W') ? 'bg-green-800 text-white' : 'bg-red-800/50 text-red-300'}>
+                            <Badge variant={team.lastMatch.startsWith('W') ? 'default' : 'secondary'} className={team.lastMatch.startsWith('W') ? 'bg-green-600 text-white' : 'bg-red-100 text-red-700'}>
                               {team.lastMatch}
                             </Badge>
                           </TableCell>
@@ -165,55 +199,49 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
               </Card>
             ))
           ) : (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-black py-8 bg-white/80 rounded border border-green-200">
               No league data found for the selected filters.
             </div>
           )}
         </TabsContent>
 
         <TabsContent value="national" className="space-y-6">
-          {showNationalCup ? (
-            <Card className="hover-scale bg-black/50 border-green-700/50">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Trophy className="h-5 w-5 text-yellow-400" />
-                  National University Cup - {nationalCup.currentRound}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <h3 className="font-semibold text-lg text-white">Upcoming Matches</h3>
-                {nationalCup.matches.map((match, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-green-900/20 rounded-lg border border-green-700/50">
-                    <div className="flex items-center space-x-4">
-                      <div className="text-lg font-semibold text-white">{match.team1}</div>
-                      <div className="text-gray-400">vs</div>
-                      <div className="text-lg font-semibold text-white">{match.team2}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-semibold text-white">{match.date}</div>
-                      <div className="text-sm text-gray-400">{match.venue}</div>
-                    </div>
+          <Card className="hover-scale bg-white border-green-700/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-black">
+                <Trophy className="h-5 w-5 text-yellow-500" />
+                National University Cup - {activeFilters.sport || "Basketball"} - {currentNationalCup.currentRound}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <h3 className="font-semibold text-lg text-black">Upcoming Matches</h3>
+              {currentNationalCup.matches.map((match, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-lg font-semibold text-black">{match.team1}</div>
+                    <div className="text-gray-600">vs</div>
+                    <div className="text-lg font-semibold text-black">{match.team2}</div>
                   </div>
-                ))}
-                
-                <h3 className="font-semibold text-lg mt-6 text-white">Recent Results</h3>
-                {nationalCup.pastResults.map((result, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-green-900/30 rounded-lg border border-green-700/50">
-                    <div className="flex items-center space-x-4">
-                      <Badge variant="outline" className="border-green-700/50 text-green-300">{result.round}</Badge>
-                      <div className="font-semibold text-white">{result.team1}</div>
-                      <div className="text-2xl font-bold text-green-400">{result.score1} - {result.score2}</div>
-                      <div className="font-semibold text-white">{result.team2}</div>
-                    </div>
+                  <div className="text-right">
+                    <div className="font-semibold text-black">{match.date}</div>
+                    <div className="text-sm text-gray-700">{match.venue}</div>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="text-center text-gray-400 py-8">
-              No national cup data found for the selected sport.
-            </div>
-          )}
+                </div>
+              ))}
+              
+              <h3 className="font-semibold text-lg mt-6 text-black">Recent Results</h3>
+              {currentNationalCup.pastResults.map((result, index) => (
+                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex items-center space-x-4">
+                    <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{result.round}</Badge>
+                    <div className="font-semibold text-black">{result.team1}</div>
+                    <div className="text-2xl font-bold text-green-600">{result.score1} - {result.score2}</div>
+                    <div className="font-semibold text-black">{result.team2}</div>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
