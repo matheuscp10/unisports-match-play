@@ -1,19 +1,37 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { User, Search, Menu, LogOut, Settings, Bell } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SearchModal from "./SearchModal";
-import SignInModal from "./SignInModal";
+import SimpleAuth from "./SimpleAuth";
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  university: string;
+  followedMatches: number[];
+  playerProfile?: {
+    sport: string;
+    level: string;
+    availability: string;
+  };
+}
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName] = useState("John Doe");
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  useEffect(() => {
+    // Check if user is already logged in on component mount
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  const handleAuthChange = (user: User | null) => {
+    setCurrentUser(user);
   };
 
   return (
@@ -50,48 +68,7 @@ const Header = () => {
             </Button>
           </SearchModal>
           
-          {isLoggedIn ? (
-            <>
-              <Button variant="ghost" size="sm" className="hover-scale">
-                <Bell className="h-4 w-4" />
-              </Button>
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-500 text-white text-sm">
-                        {userName.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="hidden md:block">{userName}</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem>
-                    <User className="h-4 w-4 mr-2" />
-                    My Profile
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="h-4 w-4 mr-2" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="text-red-600">
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </>
-          ) : (
-            <SignInModal>
-              <Button variant="outline" size="sm" className="hover-scale">
-                <User className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-            </SignInModal>
-          )}
+          <SimpleAuth onAuthChange={handleAuthChange} />
 
           {/* Mobile Menu */}
           <Sheet>
@@ -114,14 +91,6 @@ const Header = () => {
                 <a href="#matchmaking" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Players
                 </a>
-                {!isLoggedIn && (
-                  <SignInModal>
-                    <Button variant="outline" className="mt-4">
-                      <User className="h-4 w-4 mr-2" />
-                      Sign In
-                    </Button>
-                  </SignInModal>
-                )}
               </nav>
             </SheetContent>
           </Sheet>
