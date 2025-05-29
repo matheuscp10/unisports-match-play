@@ -35,10 +35,10 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
   ];
 
   return (
-    <Card className="w-full max-w-4xl">
+    <Card className="w-full max-w-4xl bg-white">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-black">
             <Trophy className="h-5 w-5" />
             Match Details
           </CardTitle>
@@ -56,27 +56,27 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
         <div className="text-center space-y-4">
           <div className="grid grid-cols-3 gap-4 items-center">
             <div className="text-right">
-              <h3 className="text-xl font-bold">{match.team1}</h3>
+              <h3 className="text-xl font-bold text-black">{match.team1}</h3>
               <p className="text-sm text-gray-600">Home</p>
             </div>
             
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600">
+              <div className="text-4xl font-bold text-green-600">
                 {match.score1} - {match.score2}
               </div>
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mt-2">
+              <div className="flex items-center justify-center gap-2 text-sm text-black mt-2">
                 <Clock className="h-4 w-4" />
                 {match.time} • {match.quarter}
               </div>
             </div>
             
             <div className="text-left">
-              <h3 className="text-xl font-bold">{match.team2}</h3>
+              <h3 className="text-xl font-bold text-black">{match.team2}</h3>
               <p className="text-sm text-gray-600">Away</p>
             </div>
           </div>
           
-          <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center justify-center gap-4 text-sm text-black">
             <div className="flex items-center gap-1">
               <MapPin className="h-4 w-4" />
               University Stadium
@@ -94,19 +94,19 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
 
         {/* Detailed Stats */}
         <Tabs defaultValue="team-stats" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="team-stats">Team Stats</TabsTrigger>
-            <TabsTrigger value="player-stats">Player Stats</TabsTrigger>
-            <TabsTrigger value="timeline">Timeline</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-gray-100">
+            <TabsTrigger value="team-stats" className="text-black data-[state=active]:bg-green-800 data-[state=active]:text-white">Team Stats</TabsTrigger>
+            <TabsTrigger value="player-stats" className="text-black data-[state=active]:bg-green-800 data-[state=active]:text-white">Player Stats</TabsTrigger>
+            <TabsTrigger value="timeline" className="text-black data-[state=active]:bg-green-800 data-[state=active]:text-white">Timeline</TabsTrigger>
           </TabsList>
           
           <TabsContent value="team-stats" className="space-y-4">
             <div className="space-y-3">
               {teamStats.map((stat, index) => (
                 <div key={index} className="grid grid-cols-3 gap-4 items-center p-3 bg-gray-50 rounded">
-                  <div className="text-right font-medium">{stat.team1}</div>
-                  <div className="text-center text-sm text-gray-600">{stat.stat}</div>
-                  <div className="text-left font-medium">{stat.team2}</div>
+                  <div className="text-right font-medium text-black">{stat.team1}</div>
+                  <div className="text-center text-sm text-black">{stat.stat}</div>
+                  <div className="text-left font-medium text-black">{stat.team2}</div>
                 </div>
               ))}
             </div>
@@ -117,10 +117,10 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
               {playerStats.map((player, index) => (
                 <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded">
                   <div>
-                    <div className="font-medium">{player.name}</div>
+                    <div className="font-medium text-black">{player.name}</div>
                     <div className="text-sm text-gray-600">{player.team}</div>
                   </div>
-                  <div className="flex gap-4 text-sm">
+                  <div className="flex gap-4 text-sm text-black">
                     <span>{player.points} PTS</span>
                     <span>{player.assists} AST</span>
                     <span>{player.rebounds} REB</span>
@@ -135,21 +135,21 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
               <div className="flex items-center gap-3 p-3 bg-green-50 rounded">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <div className="flex-1">
-                  <div className="font-medium">Goal! {match.team1}</div>
+                  <div className="font-medium text-black">Goal! {match.team1}</div>
                   <div className="text-sm text-gray-600">18:45 - John Smith scores</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded">
                 <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                 <div className="flex-1">
-                  <div className="font-medium">Timeout</div>
+                  <div className="font-medium text-black">Timeout</div>
                   <div className="text-sm text-gray-600">15:30 - {match.team2} calls timeout</div>
                 </div>
               </div>
               <div className="flex items-center gap-3 p-3 bg-red-50 rounded">
                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
                 <div className="flex-1">
-                  <div className="font-medium">Foul</div>
+                  <div className="font-medium text-black">Foul</div>
                   <div className="text-sm text-gray-600">12:15 - Personal foul on Alex Brown</div>
                 </div>
               </div>
@@ -158,11 +158,11 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
         </Tabs>
 
         <div className="flex gap-2 pt-4">
-          <Button variant="outline" className="flex-1">
+          <Button variant="outline" className="flex-1 text-black border-green-600 hover:bg-green-50">
             <TrendingUp className="h-4 w-4 mr-2" />
             View Statistics
           </Button>
-          <Button variant="outline" className="flex-1">
+          <Button variant="outline" className="flex-1 text-black border-green-600 hover:bg-green-50">
             <Calendar className="h-4 w-4 mr-2" />
             Follow Team
           </Button>

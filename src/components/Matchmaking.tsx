@@ -86,6 +86,30 @@ const Matchmaking = () => {
     }, 2000);
   };
 
+  const handleQuickMatch = () => {
+    toast({
+      title: "Finding Quick Match! 🏃‍♂️",
+      description: "Searching for available players near you...",
+      duration: 3000,
+    });
+  };
+
+  const handleScheduleGame = () => {
+    toast({
+      title: "Game Scheduled! 📅",
+      description: "Your game has been added to the schedule. Check your calendar!",
+      duration: 3000,
+    });
+  };
+
+  const handleCreateTeam = () => {
+    toast({
+      title: "Team Created! 👥",
+      description: "Your new team is ready. Invite players to join!",
+      duration: 3000,
+    });
+  };
+
   const activePlayers = [
     {
       name: "Sarah Martinez",
@@ -370,15 +394,27 @@ const Matchmaking = () => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline" className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50">
+            <Button 
+              variant="outline" 
+              className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
+              onClick={handleQuickMatch}
+            >
               <div className="font-semibold">Quick Match</div>
               <div className="text-xs text-gray-600">Find players now</div>
             </Button>
-            <Button variant="outline" className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50">
+            <Button 
+              variant="outline" 
+              className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
+              onClick={handleScheduleGame}
+            >
               <div className="font-semibold">Schedule Game</div>
               <div className="text-xs text-gray-600">Plan for later</div>
             </Button>
-            <Button variant="outline" className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50">
+            <Button 
+              variant="outline" 
+              className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
+              onClick={handleCreateTeam}
+            >
               <div className="font-semibold">Create Team</div>
               <div className="text-xs text-gray-600">Form a regular group</div>
             </Button>
