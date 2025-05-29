@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { User, Search, Menu, LogOut, Settings, Bell } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -7,13 +7,53 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SearchModal from "./SearchModal";
 import SignInModal from "./SignInModal";
+import ProfileModal from "./ProfileModal";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName] = useState("John Doe");
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    // Check if user is logged in
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      setIsLoggedIn(true);
+      setUserName(userData.name);
+    }
+
+    // Listen for login events
+    const handleStorageChange = () => {
+      const savedUser = localStorage.getItem('currentUser');
+      if (savedUser) {
+        const userData = JSON.parse(savedUser);
+        setIsLoggedIn(true);
+        setUserName(userData.name);
+      } else {
+        setIsLoggedIn(false);
+        setUserName("");
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Custom event for same-tab updates
+    window.addEventListener('userLogin', handleStorageChange);
+    window.addEventListener('userLogout', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userLogin', handleStorageChange);
+      window.removeEventListener('userLogout', handleStorageChange);
+    };
+  }, []);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserName("");
+    localStorage.removeItem('currentUser');
+    
+    // Dispatch custom event for logout
+    window.dispatchEvent(new Event('userLogout'));
   };
 
   return (
@@ -56,22 +96,24 @@ const Header = () => {
                 <Bell className="h-4 w-4" />
               </Button>
               
+              <ProfileModal>
+                <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-blue-500 text-white text-sm">
+                      {userName.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:block">{userName}</span>
+                </Button>
+              </ProfileModal>
+
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-blue-500 text-white text-sm">
-                        {userName.split(' ').map(n => n[0]).join('')}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="hidden md:block">{userName}</span>
+                  <Button variant="ghost" size="sm">
+                    <Settings className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem>
-                    <User className="h-4 w-4 mr-2" />
-                    My Profile
-                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Settings className="h-4 w-4 mr-2" />
                     Settings
@@ -121,6 +163,12 @@ const Header = () => {
                       Sign In
                     </Button>
                   </SignInModal>
+                )}
+                {isLoggedIn && (
+                  <Button variant="outline" onClick={handleLogout} className="mt-4 text-red-600">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
                 )}
               </nav>
             </SheetContent>

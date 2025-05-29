@@ -24,6 +24,14 @@ const SignInModal = ({ children }: SignInModalProps) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
+  // Sample account
+  const sampleAccount = {
+    email: "student@university.edu",
+    password: "password123",
+    name: "John Smith",
+    university: "MIT"
+  };
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -38,15 +46,36 @@ const SignInModal = ({ children }: SignInModalProps) => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      setIsLoggedIn(true);
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in to UniSports.",
-      });
-      setTimeout(() => {
-        setOpen(false);
-        resetForm();
-      }, 2000);
+      
+      if (email === sampleAccount.email && password === sampleAccount.password) {
+        const userData = {
+          name: sampleAccount.name,
+          email: sampleAccount.email,
+          university: sampleAccount.university
+        };
+        
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        setIsLoggedIn(true);
+        
+        // Dispatch custom event for login
+        window.dispatchEvent(new Event('userLogin'));
+        
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in to UniSports.",
+        });
+        
+        setTimeout(() => {
+          setOpen(false);
+          resetForm();
+        }, 2000);
+      } else {
+        toast({
+          title: "Error",
+          description: "Invalid credentials. Try: student@university.edu / password123",
+          variant: "destructive"
+        });
+      }
     }, 1500);
   };
 
@@ -82,11 +111,24 @@ const SignInModal = ({ children }: SignInModalProps) => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      
+      const userData = {
+        name: name,
+        email: email,
+        university: university
+      };
+      
+      localStorage.setItem('currentUser', JSON.stringify(userData));
       setIsLoggedIn(true);
+      
+      // Dispatch custom event for login
+      window.dispatchEvent(new Event('userLogin'));
+      
       toast({
         title: "Account created successfully!",
         description: "Welcome to UniSports! Your account has been created and you are now signed in.",
       });
+      
       setTimeout(() => {
         setOpen(false);
         resetForm();
@@ -120,7 +162,7 @@ const SignInModal = ({ children }: SignInModalProps) => {
           <div className="text-center py-8">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-green-600 mb-2">Success!</h2>
-            <p className="text-gray-600">Redirecting you to your dashboard...</p>
+            <p className="text-gray-600">Welcome to UniSports!</p>
           </div>
         ) : (
           <>
@@ -147,6 +189,15 @@ const SignInModal = ({ children }: SignInModalProps) => {
                 <div className="text-center text-sm text-gray-600 mb-4">
                   Sign in to your existing account
                 </div>
+                
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="text-sm text-blue-800 font-medium">Sample Account:</div>
+                  <div className="text-xs text-blue-600 mt-1">
+                    Email: student@university.edu<br />
+                    Password: password123
+                  </div>
+                </div>
+                
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="signin-email">Email Address</Label>
