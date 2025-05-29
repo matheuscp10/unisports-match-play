@@ -1,8 +1,9 @@
 
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Trophy } from "lucide-react";
+import { Trophy, User } from "lucide-react";
 import LeagueStatistics from "./LeagueStatistics";
+import PersonalDashboard from "./PersonalDashboard";
 import SportFilters from "./SportFilters";
 
 const Statistics = () => {
@@ -23,10 +24,14 @@ const Statistics = () => {
       </div>
 
       <Tabs defaultValue="league-stats" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 bg-gray-100 border border-green-700/50">
+        <TabsList className="grid w-full grid-cols-2 bg-gray-100 border border-green-700/50">
           <TabsTrigger value="league-stats" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">
             <Trophy className="h-4 w-4" />
             League Statistics
+          </TabsTrigger>
+          <TabsTrigger value="personal" className="flex items-center gap-2 data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">
+            <User className="h-4 w-4" />
+            Personal Dashboard
           </TabsTrigger>
         </TabsList>
 
@@ -39,6 +44,10 @@ const Statistics = () => {
               {activeFilters.university ? activeFilters.university : activeFilters.country}
             </div>
           )}
+        </TabsContent>
+        
+        <TabsContent value="personal">
+          <PersonalDashboard />
         </TabsContent>
       </Tabs>
     </div>

@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, User, Volleyball, Check, AlertCircle } from "lucide-react";
+import { Users, User, Volleyball, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -15,8 +15,6 @@ const Matchmaking = () => {
   const [joiningGroups, setJoiningGroups] = useState<number[]>([]);
   const [joinedGroups, setJoinedGroups] = useState<number[]>([]);
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
-  const [hasProfile, setHasProfile] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "",
     university: "",
@@ -25,28 +23,7 @@ const Matchmaking = () => {
     availability: ""
   });
 
-  useEffect(() => {
-    // Check if user is logged in and has profile
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      setIsLoggedIn(true);
-      const userData = JSON.parse(savedUser);
-      if (userData.playerProfile) {
-        setHasProfile(true);
-      }
-    }
-  }, []);
-
   const handleConnectPlayer = (index: number, playerName: string) => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please login to connect with other players",
-        duration: 3000,
-      });
-      return;
-    }
-
     setConnectingPlayers(prev => [...prev, index]);
     
     // Simulate connection delay
@@ -63,15 +40,6 @@ const Matchmaking = () => {
   };
 
   const handleJoinGroup = (index: number, groupName: string) => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please login to join groups",
-        duration: 3000,
-      });
-      return;
-    }
-
     setJoiningGroups(prev => [...prev, index]);
     
     // Simulate join delay
@@ -100,21 +68,6 @@ const Matchmaking = () => {
     setIsCreatingProfile(true);
     
     setTimeout(() => {
-      // Save profile to current user
-      const savedUser = localStorage.getItem('currentUser');
-      if (savedUser) {
-        const userData = JSON.parse(savedUser);
-        userData.playerProfile = {
-          sport: profileData.sport,
-          level: profileData.level,
-          availability: profileData.availability
-        };
-        userData.name = profileData.name;
-        userData.university = profileData.university;
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        setHasProfile(true);
-      }
-
       setIsCreatingProfile(false);
       toast({
         title: "Profile Created Successfully! 🎉",
@@ -134,15 +87,6 @@ const Matchmaking = () => {
   };
 
   const handleQuickMatch = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please login to find quick matches",
-        duration: 3000,
-      });
-      return;
-    }
-
     toast({
       title: "Finding Quick Match! 🏃‍♂️",
       description: "Searching for available players near you...",
@@ -151,15 +95,6 @@ const Matchmaking = () => {
   };
 
   const handleScheduleGame = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please login to schedule games",
-        duration: 3000,
-      });
-      return;
-    }
-
     toast({
       title: "Game Scheduled! 📅",
       description: "Your game has been added to the schedule. Check your calendar!",
@@ -168,15 +103,6 @@ const Matchmaking = () => {
   };
 
   const handleCreateTeam = () => {
-    if (!isLoggedIn) {
-      toast({
-        title: "Login Required",
-        description: "Please login to create teams",
-        duration: 3000,
-      });
-      return;
-    }
-
     toast({
       title: "Team Created! 👥",
       description: "Your new team is ready. Invite players to join!",
@@ -247,115 +173,103 @@ const Matchmaking = () => {
     <div className="space-y-8 bg-white/95 rounded-lg p-6 border border-green-700/40 shadow-lg">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-black">Find Players</h2>
-        {!isLoggedIn ? (
-          <div className="flex items-center space-x-2 text-amber-600 bg-amber-50 px-3 py-2 rounded-lg">
-            <AlertCircle className="h-4 w-4" />
-            <span className="text-sm">Login required to create profile</span>
-          </div>
-        ) : hasProfile ? (
-          <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-3 py-2 rounded-lg">
-            <Check className="h-4 w-4" />
-            <span className="text-sm">Profile created</span>
-          </div>
-        ) : (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="hover-scale bg-green-700 hover:bg-green-600 text-white border-green-600">
-                <User className="h-4 w-4 mr-2" />
-                Create Profile
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-white max-w-md">
-              <DialogTitle className="text-black">Create Your Player Profile</DialogTitle>
-              <DialogDescription className="text-gray-600">
-                Fill in your information to start connecting with other players
-              </DialogDescription>
-              <div className="space-y-4 py-4">
-                <div>
-                  <label className="block text-sm font-medium text-black mb-2">Full Name *</label>
-                  <Input
-                    value={profileData.name}
-                    onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-                    placeholder="Enter your full name"
-                    className="border-green-200"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-black mb-2">University *</label>
-                  <Select value={profileData.university} onValueChange={(value) => setProfileData({...profileData, university: value})}>
-                    <SelectTrigger className="border-green-200">
-                      <SelectValue placeholder="Select your university" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="MIT">MIT</SelectItem>
-                      <SelectItem value="Harvard University">Harvard University</SelectItem>
-                      <SelectItem value="Stanford University">Stanford University</SelectItem>
-                      <SelectItem value="UCLA">UCLA</SelectItem>
-                      <SelectItem value="Yale University">Yale University</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-black mb-2">Primary Sport *</label>
-                  <Select value={profileData.sport} onValueChange={(value) => setProfileData({...profileData, sport: value})}>
-                    <SelectTrigger className="border-green-200">
-                      <SelectValue placeholder="Select your sport" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Basketball">Basketball</SelectItem>
-                      <SelectItem value="Tennis">Tennis</SelectItem>
-                      <SelectItem value="Soccer">Soccer</SelectItem>
-                      <SelectItem value="Volleyball">Volleyball</SelectItem>
-                      <SelectItem value="Running">Running</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-black mb-2">Skill Level</label>
-                  <Select value={profileData.level} onValueChange={(value) => setProfileData({...profileData, level: value})}>
-                    <SelectTrigger className="border-green-200">
-                      <SelectValue placeholder="Select your level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Beginner">Beginner</SelectItem>
-                      <SelectItem value="Intermediate">Intermediate</SelectItem>
-                      <SelectItem value="Advanced">Advanced</SelectItem>
-                      <SelectItem value="Professional">Professional</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-black mb-2">Availability</label>
-                  <Input
-                    value={profileData.availability}
-                    onChange={(e) => setProfileData({...profileData, availability: e.target.value})}
-                    placeholder="e.g., Weekday evenings, Weekend mornings"
-                    className="border-green-200"
-                  />
-                </div>
-
-                <Button 
-                  onClick={handleCreateProfile}
-                  disabled={isCreatingProfile}
-                  className="w-full bg-green-700 hover:bg-green-800 text-white"
-                >
-                  {isCreatingProfile ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Creating Profile...
-                    </>
-                  ) : (
-                    "Create Profile"
-                  )}
-                </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="hover-scale bg-green-700 hover:bg-green-600 text-white border-green-600">
+              <User className="h-4 w-4 mr-2" />
+              Create Profile
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="bg-white max-w-md">
+            <DialogTitle className="text-black">Create Your Player Profile</DialogTitle>
+            <DialogDescription className="text-gray-600">
+              Fill in your information to start connecting with other players
+            </DialogDescription>
+            <div className="space-y-4 py-4">
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Full Name *</label>
+                <Input
+                  value={profileData.name}
+                  onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+                  placeholder="Enter your full name"
+                  className="border-green-200"
+                />
               </div>
-            </DialogContent>
-          </Dialog>
-        )}
+              
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">University *</label>
+                <Select value={profileData.university} onValueChange={(value) => setProfileData({...profileData, university: value})}>
+                  <SelectTrigger className="border-green-200">
+                    <SelectValue placeholder="Select your university" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="MIT">MIT</SelectItem>
+                    <SelectItem value="Harvard University">Harvard University</SelectItem>
+                    <SelectItem value="Stanford University">Stanford University</SelectItem>
+                    <SelectItem value="UCLA">UCLA</SelectItem>
+                    <SelectItem value="Yale University">Yale University</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Primary Sport *</label>
+                <Select value={profileData.sport} onValueChange={(value) => setProfileData({...profileData, sport: value})}>
+                  <SelectTrigger className="border-green-200">
+                    <SelectValue placeholder="Select your sport" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Basketball">Basketball</SelectItem>
+                    <SelectItem value="Tennis">Tennis</SelectItem>
+                    <SelectItem value="Soccer">Soccer</SelectItem>
+                    <SelectItem value="Volleyball">Volleyball</SelectItem>
+                    <SelectItem value="Running">Running</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Skill Level</label>
+                <Select value={profileData.level} onValueChange={(value) => setProfileData({...profileData, level: value})}>
+                  <SelectTrigger className="border-green-200">
+                    <SelectValue placeholder="Select your level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Beginner">Beginner</SelectItem>
+                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                    <SelectItem value="Advanced">Advanced</SelectItem>
+                    <SelectItem value="Professional">Professional</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-black mb-2">Availability</label>
+                <Input
+                  value={profileData.availability}
+                  onChange={(e) => setProfileData({...profileData, availability: e.target.value})}
+                  placeholder="e.g., Weekday evenings, Weekend mornings"
+                  className="border-green-200"
+                />
+              </div>
+
+              <Button 
+                onClick={handleCreateProfile}
+                disabled={isCreatingProfile}
+                className="w-full bg-green-700 hover:bg-green-800 text-white"
+              >
+                {isCreatingProfile ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Creating Profile...
+                  </>
+                ) : (
+                  "Create Profile"
+                )}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
