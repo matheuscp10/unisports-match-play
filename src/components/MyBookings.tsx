@@ -10,21 +10,8 @@ const MyBookings = () => {
   const { toast } = useToast();
   const [cancellingBookings, setCancellingBookings] = useState<number[]>([]);
 
-  const handleCancelBooking = (id: number, type: string, name: string) => {
-    setCancellingBookings(prev => [...prev, id]);
-    
-    setTimeout(() => {
-      setCancellingBookings(prev => prev.filter(bookingId => bookingId !== id));
-      toast({
-        title: "Booking Cancelled 🚫",
-        description: `Your ${type.toLowerCase()} "${name}" has been cancelled.`,
-        duration: 3000,
-      });
-    }, 1500);
-  };
-
-  // Mock booked fields data
-  const bookedFields = [
+  // Mock booked fields data - now as state so we can remove items
+  const [bookedFields, setBookedFields] = useState([
     {
       id: 1,
       fieldName: "MIT Recreation Center",
@@ -55,10 +42,10 @@ const MyBookings = () => {
       status: "Pending",
       price: "$20/hour"
     }
-  ];
+  ]);
 
-  // Mock scheduled matches data
-  const scheduledMatches = [
+  // Mock scheduled matches data - now as state so we can remove items
+  const [scheduledMatches, setScheduledMatches] = useState([
     {
       id: 4,
       opponent: "Sarah Martinez",
@@ -89,7 +76,28 @@ const MyBookings = () => {
       type: "Pick-up Game",
       status: "Pending"
     }
-  ];
+  ]);
+
+  const handleCancelBooking = (id: number, type: string, name: string) => {
+    setCancellingBookings(prev => [...prev, id]);
+    
+    setTimeout(() => {
+      setCancellingBookings(prev => prev.filter(bookingId => bookingId !== id));
+      
+      // Actually remove the item from the appropriate list
+      if (type === "field booking") {
+        setBookedFields(prev => prev.filter(field => field.id !== id));
+      } else {
+        setScheduledMatches(prev => prev.filter(match => match.id !== id));
+      }
+      
+      toast({
+        title: "Booking Cancelled 🚫",
+        description: `Your ${type.toLowerCase()} "${name}" has been cancelled and removed.`,
+        duration: 3000,
+      });
+    }, 1500);
+  };
 
   return (
     <div className="space-y-8">
