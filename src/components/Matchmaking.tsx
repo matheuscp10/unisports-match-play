@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Users, User, Volleyball, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -253,20 +253,27 @@ const Matchmaking = () => {
                 />
               </div>
 
-              <Button 
-                onClick={handleCreateProfile}
-                disabled={isCreatingProfile}
-                className="w-full bg-green-700 hover:bg-green-800 text-white"
-              >
-                {isCreatingProfile ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Creating Profile...
-                  </>
-                ) : (
-                  "Create Profile"
-                )}
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleCreateProfile}
+                  disabled={isCreatingProfile}
+                  className="flex-1 bg-green-700 hover:bg-green-800 text-white"
+                >
+                  {isCreatingProfile ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Creating Profile...
+                    </>
+                  ) : (
+                    "Create Profile"
+                  )}
+                </Button>
+                <DialogClose asChild>
+                  <Button variant="outline" className="flex-1">
+                    Cancel
+                  </Button>
+                </DialogClose>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
