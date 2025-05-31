@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Calendar, MapPin, Clock, Users, X, Navigation } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, X, Navigation, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 
@@ -99,6 +99,43 @@ const MyBookings = () => {
     }, 1500);
   };
 
+  const handleViewLocation = (locationName: string) => {
+    // Open Google Maps with the location
+    const encodedLocation = encodeURIComponent(locationName);
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedLocation}`;
+    window.open(mapsUrl, '_blank');
+    
+    toast({
+      title: "Opening Location 📍",
+      description: `Opening ${locationName} in Google Maps`,
+      duration: 2000,
+    });
+  };
+
+  const handleGetDirections = (locationName: string) => {
+    // Open Google Maps directions
+    const encodedLocation = encodeURIComponent(locationName);
+    const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
+    window.open(directionsUrl, '_blank');
+    
+    toast({
+      title: "Getting Directions 🗺️",
+      description: `Opening directions to ${locationName}`,
+      duration: 2000,
+    });
+  };
+
+  const handleMessagePlayer = (playerName: string) => {
+    toast({
+      title: "Opening Message 💬",
+      description: `Starting conversation with ${playerName}`,
+      duration: 2000,
+    });
+    
+    // Simulate opening a messaging interface
+    console.log(`Opening message interface for ${playerName}`);
+  };
+
   return (
     <div className="space-y-8">
       {/* Booked Fields Section */}
@@ -151,11 +188,21 @@ const MyBookings = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-green-600 text-green-400 hover:bg-green-700/20">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-green-600 text-green-400 hover:bg-green-700/20"
+                      onClick={() => handleViewLocation(booking.location)}
+                    >
                       <MapPin className="h-4 w-4 mr-2" />
                       View Location
                     </Button>
-                    <Button variant="outline" size="sm" className="border-green-600 text-green-400 hover:bg-green-700/20">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-green-600 text-green-400 hover:bg-green-700/20"
+                      onClick={() => handleGetDirections(booking.location)}
+                    >
                       <Navigation className="h-4 w-4 mr-2" />
                       Get Directions
                     </Button>
@@ -238,11 +285,22 @@ const MyBookings = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-green-600 text-green-400 hover:bg-green-700/20">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-green-600 text-green-400 hover:bg-green-700/20"
+                      onClick={() => handleViewLocation(match.location)}
+                    >
                       <MapPin className="h-4 w-4 mr-2" />
                       View Location
                     </Button>
-                    <Button variant="outline" size="sm" className="border-green-600 text-green-400 hover:bg-green-700/20">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-green-600 text-green-400 hover:bg-green-700/20"
+                      onClick={() => handleMessagePlayer(match.opponent || match.teamName || "Team")}
+                    >
+                      <MessageCircle className="h-4 w-4 mr-2" />
                       Message {match.opponent ? "Player" : "Team"}
                     </Button>
                     <Button 
