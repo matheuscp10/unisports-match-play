@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, User, Volleyball, Check } from "lucide-react";
+import { Users, User, Volleyball, Check, Clock, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
@@ -15,12 +15,30 @@ const Matchmaking = () => {
   const [joiningGroups, setJoiningGroups] = useState<number[]>([]);
   const [joinedGroups, setJoinedGroups] = useState<number[]>([]);
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
+  const [isQuickMatching, setIsQuickMatching] = useState(false);
+  const [isSchedulingGame, setIsSchedulingGame] = useState(false);
+  const [isCreatingTeam, setIsCreatingTeam] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "",
     university: "",
     sport: "",
     level: "",
     availability: ""
+  });
+  const [gameData, setGameData] = useState({
+    sport: "",
+    date: "",
+    time: "",
+    location: "",
+    players: "",
+    level: ""
+  });
+  const [teamData, setTeamData] = useState({
+    name: "",
+    sport: "",
+    description: "",
+    level: "",
+    meetingSchedule: ""
   });
 
   const handleConnectPlayer = (index: number, playerName: string) => {
@@ -87,27 +105,79 @@ const Matchmaking = () => {
   };
 
   const handleQuickMatch = () => {
-    toast({
-      title: "Finding Quick Match! 🏃‍♂️",
-      description: "Searching for available players near you...",
-      duration: 3000,
-    });
+    setIsQuickMatching(true);
+    
+    setTimeout(() => {
+      setIsQuickMatching(false);
+      toast({
+        title: "Quick Match Found! 🎾",
+        description: "You've been matched with Alex Chen for tennis. They'll contact you shortly!",
+        duration: 4000,
+      });
+    }, 3000);
   };
 
   const handleScheduleGame = () => {
-    toast({
-      title: "Game Scheduled! 📅",
-      description: "Your game has been added to the schedule. Check your calendar!",
-      duration: 3000,
-    });
+    if (!gameData.sport || !gameData.date || !gameData.time) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in sport, date, and time to schedule your game.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setIsSchedulingGame(true);
+    
+    setTimeout(() => {
+      setIsSchedulingGame(false);
+      toast({
+        title: "Game Scheduled Successfully! 📅",
+        description: `Your ${gameData.sport} game on ${gameData.date} at ${gameData.time} has been posted. Players will start joining soon!`,
+        duration: 4000,
+      });
+      
+      // Reset form
+      setGameData({
+        sport: "",
+        date: "",
+        time: "",
+        location: "",
+        players: "",
+        level: ""
+      });
+    }, 2000);
   };
 
   const handleCreateTeam = () => {
-    toast({
-      title: "Team Created! 👥",
-      description: "Your new team is ready. Invite players to join!",
-      duration: 3000,
-    });
+    if (!teamData.name || !teamData.sport) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide team name and sport to create your team.",
+        duration: 3000,
+      });
+      return;
+    }
+
+    setIsCreatingTeam(true);
+    
+    setTimeout(() => {
+      setIsCreatingTeam(false);
+      toast({
+        title: "Team Created Successfully! 👥",
+        description: `"${teamData.name}" team is now active! Share your team code: TC${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+        duration: 4000,
+      });
+      
+      // Reset form
+      setTeamData({
+        name: "",
+        sport: "",
+        description: "",
+        level: "",
+        meetingSchedule: ""
+      });
+    }, 2000);
   };
 
   const activePlayers = [
@@ -405,26 +475,242 @@ const Matchmaking = () => {
               variant="outline" 
               className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
               onClick={handleQuickMatch}
+              disabled={isQuickMatching}
             >
-              <div className="font-semibold">Quick Match</div>
-              <div className="text-xs text-gray-600">Find players now</div>
+              {isQuickMatching ? (
+                <>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600 mb-2"></div>
+                  <div className="text-xs text-gray-600">Finding match...</div>
+                </>
+              ) : (
+                <>
+                  <div className="font-semibold">Quick Match</div>
+                  <div className="text-xs text-gray-600">Find players now</div>
+                </>
+              )}
             </Button>
-            <Button 
-              variant="outline" 
-              className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
-              onClick={handleScheduleGame}
-            >
-              <div className="font-semibold">Schedule Game</div>
-              <div className="text-xs text-gray-600">Plan for later</div>
-            </Button>
-            <Button 
-              variant="outline" 
-              className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
-              onClick={handleCreateTeam}
-            >
-              <div className="font-semibold">Create Team</div>
-              <div className="text-xs text-gray-600">Form a regular group</div>
-            </Button>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
+                >
+                  <Clock className="h-5 w-5 mb-1" />
+                  <div className="font-semibold">Schedule Game</div>
+                  <div className="text-xs text-gray-600">Plan for later</div>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-white max-w-md">
+                <DialogTitle className="text-black">Schedule a Game</DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Set up a game and let other players join
+                </DialogDescription>
+                <div className="space-y-4 py-4">
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Sport *</label>
+                    <Select value={gameData.sport} onValueChange={(value) => setGameData({...gameData, sport: value})}>
+                      <SelectTrigger className="border-green-200">
+                        <SelectValue placeholder="Select sport" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Basketball">Basketball</SelectItem>
+                        <SelectItem value="Tennis">Tennis</SelectItem>
+                        <SelectItem value="Soccer">Soccer</SelectItem>
+                        <SelectItem value="Volleyball">Volleyball</SelectItem>
+                        <SelectItem value="Running">Running</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Date *</label>
+                    <Input
+                      type="date"
+                      value={gameData.date}
+                      onChange={(e) => setGameData({...gameData, date: e.target.value})}
+                      className="border-green-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Time *</label>
+                    <Input
+                      type="time"
+                      value={gameData.time}
+                      onChange={(e) => setGameData({...gameData, time: e.target.value})}
+                      className="border-green-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Location</label>
+                    <Input
+                      value={gameData.location}
+                      onChange={(e) => setGameData({...gameData, location: e.target.value})}
+                      placeholder="e.g., MIT Recreation Center"
+                      className="border-green-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Number of Players</label>
+                    <Select value={gameData.players} onValueChange={(value) => setGameData({...gameData, players: value})}>
+                      <SelectTrigger className="border-green-200">
+                        <SelectValue placeholder="How many players needed?" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="2">2 players</SelectItem>
+                        <SelectItem value="4">4 players</SelectItem>
+                        <SelectItem value="6">6 players</SelectItem>
+                        <SelectItem value="8">8 players</SelectItem>
+                        <SelectItem value="10">10 players</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Skill Level</label>
+                    <Select value={gameData.level} onValueChange={(value) => setGameData({...gameData, level: value})}>
+                      <SelectTrigger className="border-green-200">
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Any">Any Level</SelectItem>
+                        <SelectItem value="Beginner">Beginner</SelectItem>
+                        <SelectItem value="Intermediate">Intermediate</SelectItem>
+                        <SelectItem value="Advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={handleScheduleGame}
+                      disabled={isSchedulingGame}
+                      className="flex-1 bg-green-700 hover:bg-green-800 text-white"
+                    >
+                      {isSchedulingGame ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Scheduling...
+                        </>
+                      ) : (
+                        "Schedule Game"
+                      )}
+                    </Button>
+                    <DialogClose asChild>
+                      <Button variant="outline" className="flex-1">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  className="h-24 flex-col hover-scale border-green-600 text-green-600 hover:bg-green-50"
+                >
+                  <UserPlus className="h-5 w-5 mb-1" />
+                  <div className="font-semibold">Create Team</div>
+                  <div className="text-xs text-gray-600">Form a regular group</div>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-white max-w-md">
+                <DialogTitle className="text-black">Create a Team</DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  Form a regular team for ongoing games and practices
+                </DialogDescription>
+                <div className="space-y-4 py-4">
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Team Name *</label>
+                    <Input
+                      value={teamData.name}
+                      onChange={(e) => setTeamData({...teamData, name: e.target.value})}
+                      placeholder="Enter team name"
+                      className="border-green-200"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Sport *</label>
+                    <Select value={teamData.sport} onValueChange={(value) => setTeamData({...teamData, sport: value})}>
+                      <SelectTrigger className="border-green-200">
+                        <SelectValue placeholder="Select sport" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Basketball">Basketball</SelectItem>
+                        <SelectItem value="Tennis">Tennis</SelectItem>
+                        <SelectItem value="Soccer">Soccer</SelectItem>
+                        <SelectItem value="Volleyball">Volleyball</SelectItem>
+                        <SelectItem value="Running">Running</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Description</label>
+                    <Input
+                      value={teamData.description}
+                      onChange={(e) => setTeamData({...teamData, description: e.target.value})}
+                      placeholder="Brief description of your team"
+                      className="border-green-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Skill Level</label>
+                    <Select value={teamData.level} onValueChange={(value) => setTeamData({...teamData, level: value})}>
+                      <SelectTrigger className="border-green-200">
+                        <SelectValue placeholder="Select level" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Mixed">Mixed Levels</SelectItem>
+                        <SelectItem value="Beginner">Beginner</SelectItem>
+                        <SelectItem value="Intermediate">Intermediate</SelectItem>
+                        <SelectItem value="Advanced">Advanced</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Meeting Schedule</label>
+                    <Input
+                      value={teamData.meetingSchedule}
+                      onChange={(e) => setTeamData({...teamData, meetingSchedule: e.target.value})}
+                      placeholder="e.g., Tuesdays & Thursdays 6-8 PM"
+                      className="border-green-200"
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={handleCreateTeam}
+                      disabled={isCreatingTeam}
+                      className="flex-1 bg-green-700 hover:bg-green-800 text-white"
+                    >
+                      {isCreatingTeam ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Creating Team...
+                        </>
+                      ) : (
+                        "Create Team"
+                      )}
+                    </Button>
+                    <DialogClose asChild>
+                      <Button variant="outline" className="flex-1">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </CardContent>
       </Card>
