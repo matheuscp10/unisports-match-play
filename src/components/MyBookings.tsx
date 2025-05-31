@@ -1,14 +1,18 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Clock, Users, X, Navigation, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import ChatModal from "./ChatModal";
 
 const MyBookings = () => {
   const { toast } = useToast();
   const [cancellingBookings, setCancellingBookings] = useState<number[]>([]);
+  const [chatModal, setChatModal] = useState<{ isOpen: boolean; playerName: string }>({
+    isOpen: false,
+    playerName: ''
+  });
 
   // Mock booked fields data - now as state so we can remove items
   const [bookedFields, setBookedFields] = useState([
@@ -126,14 +130,7 @@ const MyBookings = () => {
   };
 
   const handleMessagePlayer = (playerName: string) => {
-    toast({
-      title: "Opening Message 💬",
-      description: `Starting conversation with ${playerName}`,
-      duration: 2000,
-    });
-    
-    // Simulate opening a messaging interface
-    console.log(`Opening message interface for ${playerName}`);
+    setChatModal({ isOpen: true, playerName });
   };
 
   return (
@@ -329,6 +326,12 @@ const MyBookings = () => {
           </div>
         )}
       </div>
+
+      <ChatModal 
+        isOpen={chatModal.isOpen}
+        onClose={() => setChatModal({ isOpen: false, playerName: '' })}
+        playerName={chatModal.playerName}
+      />
     </div>
   );
 };
