@@ -69,16 +69,16 @@ const Header = () => {
             />
           </div>
           <nav className="hidden md:flex space-x-6">
-            <a href="#live" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+            <a href="#live" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
               Live Scores
             </a>
-            <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+            <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
               Statistics
             </a>
-            <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+            <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
               Fields
             </a>
-            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
               Players
             </a>
           </nav>
@@ -143,16 +143,16 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent>
               <nav className="flex flex-col space-y-4 mt-8">
-                <a href="#live" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
+                <a href="#live" className="text-black hover:text-blue-600 transition-colors text-lg">
                   Live Scores
                 </a>
-                <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+                <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
                   Statistics
                 </a>
-                <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+                <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
                   Fields
                 </a>
-                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
+                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
                   Players
                 </a>
                 {!isLoggedIn && (
