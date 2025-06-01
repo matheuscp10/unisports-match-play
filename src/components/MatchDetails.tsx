@@ -1,9 +1,9 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, MapPin, Users, Trophy, TrendingUp, Calendar } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface MatchDetailsProps {
   match: {
@@ -20,6 +20,24 @@ interface MatchDetailsProps {
 }
 
 const MatchDetails = ({ match }: MatchDetailsProps) => {
+  const { toast } = useToast();
+
+  const handleViewStatistics = () => {
+    toast({
+      title: "Statistics Opened",
+      description: `Viewing detailed statistics for ${match.team1} vs ${match.team2}`,
+    });
+    console.log(`Opening statistics for match: ${match.team1} vs ${match.team2}`);
+  };
+
+  const handleFollowTeam = () => {
+    toast({
+      title: "Team Followed",
+      description: `You are now following updates for ${match.team1} and ${match.team2}`,
+    });
+    console.log(`Following teams: ${match.team1} and ${match.team2}`);
+  };
+
   const playerStats = [
     { name: "John Smith", team: match.team1, points: 24, assists: 8, rebounds: 6 },
     { name: "Mike Johnson", team: match.team1, points: 18, assists: 4, rebounds: 12 },
@@ -158,11 +176,19 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
         </Tabs>
 
         <div className="flex gap-2 pt-4">
-          <Button variant="outline" className="flex-1 text-black border-green-600 hover:bg-green-50">
+          <Button 
+            variant="outline" 
+            className="flex-1 text-black border-green-600 hover:bg-green-50"
+            onClick={handleViewStatistics}
+          >
             <TrendingUp className="h-4 w-4 mr-2" />
             View Statistics
           </Button>
-          <Button variant="outline" className="flex-1 text-black border-green-600 hover:bg-green-50">
+          <Button 
+            variant="outline" 
+            className="flex-1 text-black border-green-600 hover:bg-green-50"
+            onClick={handleFollowTeam}
+          >
             <Calendar className="h-4 w-4 mr-2" />
             Follow Team
           </Button>
