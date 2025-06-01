@@ -1,13 +1,14 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { User, Search, Menu, LogOut, Settings, Bell } from "lucide-react";
+import { User, Search, Menu, LogOut, Settings } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SearchModal from "./SearchModal";
 import SignInModal from "./SignInModal";
 import ProfileModal from "./ProfileModal";
+import NotificationCenter from "./NotificationCenter";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,16 +69,16 @@ const Header = () => {
             />
           </div>
           <nav className="hidden md:flex space-x-6">
-            <a href="#live" className="text-gray-600 hover:text-blue-600 transition-colors story-link">
+            <a href="#live" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
               Live Scores
             </a>
-            <a href="#stats" className="text-gray-600 hover:text-blue-600 transition-colors story-link">
+            <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
               Statistics
             </a>
-            <a href="#fields" className="text-gray-600 hover:text-blue-600 transition-colors story-link">
+            <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
               Fields
             </a>
-            <a href="#matchmaking" className="text-gray-600 hover:text-blue-600 transition-colors story-link">
+            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
               Players
             </a>
           </nav>
@@ -92,9 +93,7 @@ const Header = () => {
           
           {isLoggedIn ? (
             <>
-              <Button variant="ghost" size="sm" className="hover-scale">
-                <Bell className="h-4 w-4" />
-              </Button>
+              <NotificationCenter />
               
               <ProfileModal>
                 <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
@@ -144,16 +143,16 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent>
               <nav className="flex flex-col space-y-4 mt-8">
-                <a href="#live" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="#live" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
                   Live Scores
                 </a>
-                <a href="#stats" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="#stats" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
                   Statistics
                 </a>
-                <a href="#fields" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="#fields" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
                   Fields
                 </a>
-                <a href="#matchmaking" className="text-gray-600 hover:text-blue-600 transition-colors">
+                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
                   Players
                 </a>
                 {!isLoggedIn && (
