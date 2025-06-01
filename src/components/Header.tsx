@@ -86,7 +86,7 @@ const Header = () => {
         
         <div className="flex items-center space-x-4">
           <SearchModal>
-            <Button variant="ghost" size="sm" className="hover-scale">
+            <Button variant="ghost" size="sm" className="hover-scale text-black hover:text-blue-600">
               <Search className="h-4 w-4" />
             </Button>
           </SearchModal>
@@ -96,19 +96,19 @@ const Header = () => {
               <NotificationCenter />
               
               <ProfileModal>
-                <Button variant="ghost" className="flex items-center space-x-2 hover-scale">
+                <Button variant="ghost" className="flex items-center space-x-2 hover-scale text-black hover:text-blue-600">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-blue-500 text-white text-sm">
                       {userName.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="hidden md:block">{userName}</span>
+                  <span className="hidden md:block text-black">{userName}</span>
                 </Button>
               </ProfileModal>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="text-black hover:text-blue-600">
                     <Settings className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -127,7 +127,7 @@ const Header = () => {
             </>
           ) : (
             <SignInModal>
-              <Button variant="outline" size="sm" className="hover-scale">
+              <Button variant="outline" size="sm" className="hover-scale text-black border-black hover:bg-black hover:text-white">
                 <User className="h-4 w-4 mr-2" />
                 Sign In
               </Button>
@@ -137,7 +137,7 @@ const Header = () => {
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="sm" className="md:hidden">
+              <Button variant="ghost" size="sm" className="md:hidden text-black hover:text-blue-600">
                 <Menu className="h-4 w-4" />
               </Button>
             </SheetTrigger>
@@ -146,13 +146,13 @@ const Header = () => {
                 <a href="#live" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
                   Live Scores
                 </a>
-                <a href="#stats" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
+                <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
                   Statistics
                 </a>
-                <a href="#fields" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
+                <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
                   Fields
                 </a>
-                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors font-bold text-lg">
+                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link font-bold text-lg">
                   Players
                 </a>
                 {!isLoggedIn && (
