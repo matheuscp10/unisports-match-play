@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,11 @@ import MatchDetails from "./MatchDetails";
 import SportFilters from "./SportFilters";
 import { useToast } from "@/hooks/use-toast";
 
-const LiveScores = () => {
+interface LiveScoresProps {
+  searchedSport?: string;
+}
+
+const LiveScores = ({ searchedSport }: LiveScoresProps) => {
   const { toast } = useToast();
   const [followedMatches, setFollowedMatches] = useState<number[]>([]);
   const [activeFilters, setActiveFilters] = useState({
@@ -17,6 +22,17 @@ const LiveScores = () => {
     university: "",
     sport: ""
   });
+
+  // Update filters when a sport is searched from header
+  useEffect(() => {
+    console.log("LiveScores received searchedSport:", searchedSport);
+    if (searchedSport) {
+      setActiveFilters(prev => ({
+        ...prev,
+        sport: searchedSport
+      }));
+    }
+  }, [searchedSport]);
 
   const handleFiltersChange = (filters: { country: string; university: string; sport: string }) => {
     setActiveFilters(filters);
@@ -305,17 +321,25 @@ const LiveScores = () => {
     <div className="space-y-6 bg-white/95 rounded-lg p-6 border border-green-700/40 shadow-lg">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-black">Live Scores</h2>
-        <Badge variant="secondary" className="animate-pulse bg-red-100 text-red-600 border-red-300">
-          <Flag className="h-3 w-3 mr-1" />
-          {filteredLiveMatches.length} Live
-        </Badge>
+        <div className="flex items-center gap-3">
+          {searchedSport && (
+            <div className="text-sm text-green-600 font-medium bg-green-50 px-3 py-1 rounded-full border border-green-200">
+              Filtered by: {searchedSport}
+            </div>
+          )}
+          <Badge variant="secondary" className="animate-pulse bg-red-100 text-red-600 border-red-300">
+            <Flag className="h-3 w-3 mr-1" />
+            {filteredLiveMatches.length} Live
+          </Badge>
+        </div>
       </div>
 
-      <SportFilters onFiltersChange={handleFiltersChange} />
+      <SportFilters onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
 
-      {activeFilters.country && (
+      {(activeFilters.country || activeFilters.university || activeFilters.sport) && (
         <div className="text-center text-sm text-black font-medium mt-4 bg-white/80 p-2 rounded border border-green-200">
-          Showing results for {activeFilters.sport && `${activeFilters.sport} in `}
+          Showing results for {activeFilters.sport && `${activeFilters.sport}`}
+          {activeFilters.sport && (activeFilters.university || activeFilters.country) && " in "}
           {activeFilters.university ? activeFilters.university : activeFilters.country}
         </div>
       )}

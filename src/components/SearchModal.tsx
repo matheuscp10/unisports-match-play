@@ -37,11 +37,11 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
       console.log("Searching for sport:", selectedSport);
       onSearchSport(selectedSport);
       setOpen(false);
-      // Scroll to statistics section
+      // Scroll to live scores section
       setTimeout(() => {
-        const statsSection = document.getElementById('stats');
-        if (statsSection) {
-          statsSection.scrollIntoView({ behavior: 'smooth' });
+        const liveSection = document.getElementById('live');
+        if (liveSection) {
+          liveSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
     }

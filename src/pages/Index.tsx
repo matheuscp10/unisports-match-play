@@ -13,6 +13,7 @@ import Matchmaking from "@/components/Matchmaking";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("live");
+  const [searchedSport, setSearchedSport] = useState<string>("");
 
   const scrollToSection = (sectionId: string) => {
     setActiveTab(sectionId);
@@ -22,9 +23,22 @@ const Index = () => {
     }
   };
 
+  const handleSearchSport = (sport: string) => {
+    console.log("Index received sport search:", sport);
+    setSearchedSport(sport);
+    setActiveTab("live");
+    // Scroll to live scores section
+    setTimeout(() => {
+      const liveSection = document.getElementById('live');
+      if (liveSection) {
+        liveSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      <Header />
+      <Header onSearchSport={handleSearchSport} />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 via-blue-700 to-green-600 text-white py-20">
@@ -126,7 +140,7 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="live" className="animate-fade-in">
-            <LiveScores />
+            <LiveScores searchedSport={searchedSport} />
           </TabsContent>
           
           <TabsContent value="stats" className="animate-fade-in">
