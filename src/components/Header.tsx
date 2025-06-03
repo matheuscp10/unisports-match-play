@@ -10,7 +10,11 @@ import SignInModal from "./SignInModal";
 import ProfileModal from "./ProfileModal";
 import NotificationCenter from "./NotificationCenter";
 
-const Header = () => {
+interface HeaderProps {
+  onSearchSport?: (sport: string) => void;
+}
+
+const Header = ({ onSearchSport }: HeaderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
@@ -69,23 +73,23 @@ const Header = () => {
             />
           </div>
           <nav className="hidden md:flex space-x-6">
-            <a href="#live" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+            <a href="#live" className="text-black hover:text-blue-600 transition-colors">
               Live Scores
             </a>
-            <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+            <a href="#stats" className="text-black hover:text-blue-600 transition-colors">
               Statistics
             </a>
-            <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+            <a href="#fields" className="text-black hover:text-blue-600 transition-colors">
               Fields
             </a>
-            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors">
               Players
             </a>
           </nav>
         </div>
         
         <div className="flex items-center space-x-4">
-          <SearchModal>
+          <SearchModal onSearchSport={onSearchSport}>
             <Button variant="ghost" size="sm" className="hover-scale text-black hover:text-blue-600">
               <Search className="h-4 w-4" />
             </Button>
@@ -143,16 +147,16 @@ const Header = () => {
             </SheetTrigger>
             <SheetContent>
               <nav className="flex flex-col space-y-4 mt-8">
-                <a href="#live" className="text-black hover:text-blue-600 transition-colors text-lg">
+                <a href="#live" className="text-black hover:text-blue-600 transition-colors">
                   Live Scores
                 </a>
-                <a href="#stats" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+                <a href="#stats" className="text-black hover:text-blue-600 transition-colors">
                   Statistics
                 </a>
-                <a href="#fields" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+                <a href="#fields" className="text-black hover:text-blue-600 transition-colors">
                   Fields
                 </a>
-                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors story-link text-lg">
+                <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors">
                   Players
                 </a>
                 {!isLoggedIn && (

@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -7,12 +6,22 @@ import { Filter, MapPin, School } from "lucide-react";
 
 interface SportFiltersProps {
   onFiltersChange: (filters: { country: string; university: string; sport: string }) => void;
+  activeFilters?: { country: string; university: string; sport: string };
 }
 
-const SportFilters = ({ onFiltersChange }: SportFiltersProps) => {
+const SportFilters = ({ onFiltersChange, activeFilters }: SportFiltersProps) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
   const [selectedSport, setSelectedSport] = useState("");
+
+  // Update local state when activeFilters change (from search)
+  useEffect(() => {
+    if (activeFilters) {
+      setSelectedCountry(activeFilters.country);
+      setSelectedUniversity(activeFilters.university);
+      setSelectedSport(activeFilters.sport);
+    }
+  }, [activeFilters]);
 
   const countries = [
     "United States",

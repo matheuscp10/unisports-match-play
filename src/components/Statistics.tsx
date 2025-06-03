@@ -1,15 +1,29 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Trophy } from "lucide-react";
 import LeagueStatistics from "./LeagueStatistics";
 import SportFilters from "./SportFilters";
 
-const Statistics = () => {
+interface StatisticsProps {
+  searchedSport?: string;
+}
+
+const Statistics = ({ searchedSport }: StatisticsProps) => {
   const [activeFilters, setActiveFilters] = useState({
     country: "",
     university: "",
     sport: ""
   });
+
+  // Update filters when a sport is searched from header
+  useEffect(() => {
+    if (searchedSport) {
+      setActiveFilters(prev => ({
+        ...prev,
+        sport: searchedSport
+      }));
+    }
+  }, [searchedSport]);
 
   const handleFiltersChange = (filters: { country: string; university: string; sport: string }) => {
     setActiveFilters(filters);
@@ -22,10 +36,15 @@ const Statistics = () => {
           <Trophy className="h-8 w-8 text-green-600" />
           League Statistics
         </h2>
+        {searchedSport && (
+          <div className="text-sm text-green-600 font-medium bg-green-50 px-3 py-1 rounded-full border border-green-200">
+            Filtered by: {searchedSport}
+          </div>
+        )}
       </div>
 
       <div className="space-y-6">
-        <SportFilters onFiltersChange={handleFiltersChange} />
+        <SportFilters onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
         <LeagueStatistics activeFilters={activeFilters} />
         {activeFilters.country && (
           <div className="text-center text-sm text-black font-medium mt-4 bg-white/80 p-2 rounded">

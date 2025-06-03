@@ -8,17 +8,37 @@ import { Search, Filter, MapPin, Calendar } from "lucide-react";
 
 interface SearchModalProps {
   children: React.ReactNode;
+  onSearchSport?: (sport: string) => void;
 }
 
-const SearchModal = ({ children }: SearchModalProps) => {
+const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSport, setSelectedSport] = useState("");
+  const [open, setOpen] = useState(false);
 
   const sports = ["Basketball", "Soccer", "Tennis", "Volleyball", "Baseball", "Swimming"];
   const recentSearches = ["MIT vs Harvard Basketball", "Stanford Soccer Field", "UCLA Tennis Courts"];
 
+  const handleSearch = () => {
+    if (selectedSport && onSearchSport) {
+      onSearchSport(selectedSport);
+      setOpen(false);
+      // Scroll to statistics section
+      const statsSection = document.getElementById('stats');
+      if (statsSection) {
+        statsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  const handleSportSelect = (sport: string) => {
+    const newSport = selectedSport === sport ? "" : sport;
+    setSelectedSport(newSport);
+    setSearchQuery(newSport);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
@@ -51,7 +71,7 @@ const SearchModal = ({ children }: SearchModalProps) => {
                   key={sport}
                   variant={selectedSport === sport ? "default" : "outline"}
                   className="cursor-pointer hover:bg-blue-100"
-                  onClick={() => setSelectedSport(selectedSport === sport ? "" : sport)}
+                  onClick={() => handleSportSelect(sport)}
                 >
                   {sport}
                 </Badge>
@@ -75,7 +95,7 @@ const SearchModal = ({ children }: SearchModalProps) => {
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button className="flex-1">
+            <Button className="flex-1" onClick={handleSearch} disabled={!selectedSport}>
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
