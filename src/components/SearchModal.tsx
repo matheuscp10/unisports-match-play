@@ -16,18 +16,34 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
   const [selectedSport, setSelectedSport] = useState("");
   const [open, setOpen] = useState(false);
 
-  const sports = ["Basketball", "Soccer", "Tennis", "Volleyball", "Baseball", "Swimming"];
+  // Use the exact same sport names as in SportFilters
+  const sports = [
+    "Basketball",
+    "Football (Soccer)",
+    "American Football",
+    "Tennis",
+    "Swimming",
+    "Track & Field",
+    "Baseball",
+    "Volleyball",
+    "Hockey",
+    "Rugby"
+  ];
+  
   const recentSearches = ["MIT vs Harvard Basketball", "Stanford Soccer Field", "UCLA Tennis Courts"];
 
   const handleSearch = () => {
     if (selectedSport && onSearchSport) {
+      console.log("Searching for sport:", selectedSport);
       onSearchSport(selectedSport);
       setOpen(false);
       // Scroll to statistics section
-      const statsSection = document.getElementById('stats');
-      if (statsSection) {
-        statsSection.scrollIntoView({ behavior: 'smooth' });
-      }
+      setTimeout(() => {
+        const statsSection = document.getElementById('stats');
+        if (statsSection) {
+          statsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   };
 

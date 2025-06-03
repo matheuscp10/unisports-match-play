@@ -17,6 +17,7 @@ const Statistics = ({ searchedSport }: StatisticsProps) => {
 
   // Update filters when a sport is searched from header
   useEffect(() => {
+    console.log("Statistics received searchedSport:", searchedSport);
     if (searchedSport) {
       setActiveFilters(prev => ({
         ...prev,
@@ -26,6 +27,7 @@ const Statistics = ({ searchedSport }: StatisticsProps) => {
   }, [searchedSport]);
 
   const handleFiltersChange = (filters: { country: string; university: string; sport: string }) => {
+    console.log("Filters changed:", filters);
     setActiveFilters(filters);
   };
 
@@ -46,9 +48,10 @@ const Statistics = ({ searchedSport }: StatisticsProps) => {
       <div className="space-y-6">
         <SportFilters onFiltersChange={handleFiltersChange} activeFilters={activeFilters} />
         <LeagueStatistics activeFilters={activeFilters} />
-        {activeFilters.country && (
+        {(activeFilters.country || activeFilters.university || activeFilters.sport) && (
           <div className="text-center text-sm text-black font-medium mt-4 bg-white/80 p-2 rounded">
-            Showing results for {activeFilters.sport && `${activeFilters.sport} in `}
+            Showing results for {activeFilters.sport && `${activeFilters.sport}`}
+            {activeFilters.sport && (activeFilters.university || activeFilters.country) && " in "}
             {activeFilters.university ? activeFilters.university : activeFilters.country}
           </div>
         )}

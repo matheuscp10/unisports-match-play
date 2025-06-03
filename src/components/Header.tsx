@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { User, Search, Menu, LogOut, Settings } from "lucide-react";
@@ -61,6 +60,13 @@ const Header = ({ onSearchSport }: HeaderProps) => {
     window.dispatchEvent(new Event('userLogout'));
   };
 
+  const handleSearchSport = (sport: string) => {
+    console.log("Header received sport search:", sport);
+    if (onSearchSport) {
+      onSearchSport(sport);
+    }
+  };
+
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -73,23 +79,23 @@ const Header = ({ onSearchSport }: HeaderProps) => {
             />
           </div>
           <nav className="hidden md:flex space-x-6">
-            <a href="#live" className="text-black hover:text-blue-600 transition-colors">
+            <a href="#live" className="text-black hover:text-blue-600 transition-colors font-normal">
               Live Scores
             </a>
-            <a href="#stats" className="text-black hover:text-blue-600 transition-colors">
+            <a href="#stats" className="text-black hover:text-blue-600 transition-colors font-normal">
               Statistics
             </a>
-            <a href="#fields" className="text-black hover:text-blue-600 transition-colors">
+            <a href="#fields" className="text-black hover:text-blue-600 transition-colors font-normal">
               Fields
             </a>
-            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors">
+            <a href="#matchmaking" className="text-black hover:text-blue-600 transition-colors font-normal">
               Players
             </a>
           </nav>
         </div>
         
         <div className="flex items-center space-x-4">
-          <SearchModal onSearchSport={onSearchSport}>
+          <SearchModal onSearchSport={handleSearchSport}>
             <Button variant="ghost" size="sm" className="hover-scale text-black hover:text-blue-600">
               <Search className="h-4 w-4" />
             </Button>
