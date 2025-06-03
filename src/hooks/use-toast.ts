@@ -1,4 +1,6 @@
+
 import * as React from "react"
+import { addToastNotification } from "@/components/NotificationCenter"
 
 import type {
   ToastActionElement,
@@ -90,8 +92,6 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -139,7 +139,12 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ ...props }: Toast) {
+function toast({ title, description, ...props }: Toast) {
+  // Instead of creating a traditional toast, add it to the notification center
+  if (title && description) {
+    addToastNotification(title.toString(), description.toString());
+  }
+  
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -148,18 +153,6 @@ function toast({ ...props }: Toast) {
       toast: { ...props, id },
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
-
-  dispatch({
-    type: "ADD_TOAST",
-    toast: {
-      ...props,
-      id,
-      open: true,
-      onOpenChange: (open) => {
-        if (!open) dismiss()
-      },
-    },
-  })
 
   return {
     id: id,

@@ -4,87 +4,145 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
-import { Bell, X, Calendar, Users, MapPin, Trophy } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { Bell, X, Calendar, Users, MapPin, Trophy, Info, Share, Link } from "lucide-react";
 
 interface Notification {
   id: string;
-  type: 'match' | 'booking' | 'general';
+  type: 'match' | 'booking' | 'general' | 'toast';
   title: string;
   message: string;
   timestamp: Date;
   read: boolean;
+  isToast?: boolean;
+  shareable?: boolean;
 }
 
+// Global notification state
+let globalNotifications: Notification[] = [
+  {
+    id: '1',
+    type: 'match',
+    title: 'Match Confirmed',
+    message: 'Your tennis match with Sarah Martinez is confirmed for today at 3:00 PM',
+    timestamp: new Date(Date.now() - 30 * 60 * 1000),
+    read: false,
+    shareable: true
+  },
+  {
+    id: '2',
+    type: 'booking',
+    title: 'Field Booked',
+    message: 'MIT Recreation Center basketball court booked for today 2:00 PM - 4:00 PM',
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+    read: false,
+    shareable: true
+  },
+  {
+    id: '3',
+    type: 'match',
+    title: 'New Player Request',
+    message: 'David Kim wants to schedule a basketball game with you',
+    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+    read: true,
+    shareable: true
+  },
+  {
+    id: '4',
+    type: 'general',
+    title: 'Tournament Alert',
+    message: 'Spring Tennis Tournament registration is now open!',
+    timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
+    read: false,
+    shareable: true
+  }
+];
+
+let notificationUpdateListeners: (() => void)[] = [];
+
+// Global function to add toast notifications
+export const addToastNotification = (title: string, description: string) => {
+  const newNotification: Notification = {
+    id: Date.now().toString(),
+    type: 'toast',
+    title: title,
+    message: description,
+    timestamp: new Date(),
+    read: false,
+    isToast: true
+  };
+  
+  globalNotifications = [newNotification, ...globalNotifications];
+  notificationUpdateListeners.forEach(listener => listener());
+  
+  // Auto-remove toast notifications after 5 seconds
+  setTimeout(() => {
+    globalNotifications = globalNotifications.filter(n => n.id !== newNotification.id);
+    notificationUpdateListeners.forEach(listener => listener());
+  }, 5000);
+};
+
 const NotificationCenter = () => {
-  const { toast } = useToast();
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: '1',
-      type: 'match',
-      title: 'Match Confirmed',
-      message: 'Your tennis match with Sarah Martinez is confirmed for today at 3:00 PM',
-      timestamp: new Date(Date.now() - 30 * 60 * 1000),
-      read: false
-    },
-    {
-      id: '2',
-      type: 'booking',
-      title: 'Field Booked',
-      message: 'MIT Recreation Center basketball court booked for today 2:00 PM - 4:00 PM',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      read: false
-    },
-    {
-      id: '3',
-      type: 'match',
-      title: 'New Player Request',
-      message: 'David Kim wants to schedule a basketball game with you',
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-      read: true
-    },
-    {
-      id: '4',
-      type: 'general',
-      title: 'Tournament Alert',
-      message: 'Spring Tennis Tournament registration is now open!',
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      read: false
-    }
-  ]);
+  const [notifications, setNotifications] = useState<Notification[]>(globalNotifications);
+
+  useEffect(() => {
+    const updateNotifications = () => {
+      setNotifications([...globalNotifications]);
+    };
+    
+    notificationUpdateListeners.push(updateNotifications);
+    
+    return () => {
+      notificationUpdateListeners = notificationUpdateListeners.filter(l => l !== updateNotifications);
+    };
+  }, []);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => 
-      prev.map(notification => 
-        notification.id === id 
-          ? { ...notification, read: true }
-          : notification
-      )
+    globalNotifications = globalNotifications.map(notification => 
+      notification.id === id 
+        ? { ...notification, read: true }
+        : notification
     );
+    setNotifications([...globalNotifications]);
   };
 
   const removeNotification = (id: string) => {
-    const notification = notifications.find(n => n.id === id);
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    globalNotifications = globalNotifications.filter(n => n.id !== id);
+    setNotifications([...globalNotifications]);
     
-    if (notification) {
-      toast({
-        title: "Notification Cleared 🗑️",
-        description: `"${notification.title}" has been removed`,
-        duration: 2000,
-      });
-    }
+    // Add toast notification for removal
+    addToastNotification("Notification Cleared 🗑️", "Notification has been removed");
   };
 
   const clearAllNotifications = () => {
+    globalNotifications = [];
     setNotifications([]);
-    toast({
-      title: "All Cleared! ✨",
-      description: "All notifications have been cleared",
-      duration: 2000,
-    });
+    addToastNotification("All Cleared! ✨", "All notifications have been cleared");
+  };
+
+  const shareNotification = async (notification: Notification) => {
+    try {
+      const shareUrl = `${window.location.origin}?notification=${encodeURIComponent(JSON.stringify({
+        title: notification.title,
+        message: notification.message,
+        type: notification.type
+      }))}`;
+      
+      if (navigator.share) {
+        await navigator.share({
+          title: notification.title,
+          text: notification.message,
+          url: shareUrl
+        });
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        addToastNotification("Link Copied! 🔗", "Shareable link copied to clipboard");
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+      addToastNotification("Share Failed", "Could not create shareable link");
+    }
   };
 
   const getNotificationIcon = (type: string) => {
@@ -95,6 +153,8 @@ const NotificationCenter = () => {
         return <MapPin className="h-4 w-4 text-blue-400" />;
       case 'general':
         return <Trophy className="h-4 w-4 text-yellow-400" />;
+      case 'toast':
+        return <Info className="h-4 w-4 text-purple-400" />;
       default:
         return <Bell className="h-4 w-4 text-gray-400" />;
     }
@@ -158,6 +218,8 @@ const NotificationCenter = () => {
                     className={`p-3 rounded-lg border transition-colors cursor-pointer ${
                       notification.read 
                         ? 'bg-gray-800/50 border-gray-700' 
+                        : notification.isToast
+                        ? 'bg-purple-900/20 border-purple-800/40'
                         : 'bg-green-900/20 border-green-800/40'
                     }`}
                     onClick={() => markAsRead(notification.id)}
@@ -171,7 +233,7 @@ const NotificationCenter = () => {
                               {notification.title}
                             </p>
                             {!notification.read && (
-                              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                              <div className={`w-2 h-2 rounded-full ${notification.isToast ? 'bg-purple-400' : 'bg-green-400'}`}></div>
                             )}
                           </div>
                           <p className="text-xs text-gray-400 mt-1 line-clamp-2">
@@ -182,17 +244,32 @@ const NotificationCenter = () => {
                           </p>
                         </div>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeNotification(notification.id);
-                        }}
-                        className="h-6 w-6 p-0 text-gray-400 hover:text-red-400"
-                      >
-                        <X className="h-3 w-3" />
-                      </Button>
+                      <div className="flex gap-1">
+                        {notification.shareable && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              shareNotification(notification);
+                            }}
+                            className="h-6 w-6 p-0 text-gray-400 hover:text-blue-400"
+                          >
+                            <Share className="h-3 w-3" />
+                          </Button>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeNotification(notification.id);
+                          }}
+                          className="h-6 w-6 p-0 text-gray-400 hover:text-red-400"
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
