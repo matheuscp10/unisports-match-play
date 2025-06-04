@@ -78,40 +78,40 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card className="bg-white/95 backdrop-blur-sm hover-scale cursor-pointer" onClick={() => scrollToSection("live")}>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-lg text-black">
                 <Flag className="h-5 w-5 text-red-500" />
                 Live Matches
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-blue-600">12</div>
-              <p className="text-sm text-gray-600">Currently playing</p>
+              <p className="text-sm text-black">Currently playing</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/95 backdrop-blur-sm hover-scale cursor-pointer" onClick={() => scrollToSection("fields")}>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-lg text-black">
                 <MapPin className="h-5 w-5 text-green-500" />
                 Available Fields
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">47</div>
-              <p className="text-sm text-gray-600">Ready to book</p>
+              <p className="text-sm text-black">Ready to book</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/95 backdrop-blur-sm hover-scale cursor-pointer" onClick={() => scrollToSection("matchmaking")}>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <CardTitle className="flex items-center gap-2 text-lg text-black">
                 <Users className="h-5 w-5 text-purple-500" />
                 Active Players
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-purple-600">284</div>
-              <p className="text-sm text-gray-600">Looking for matches</p>
+              <p className="text-sm text-black">Looking for matches</p>
             </CardContent>
           </Card>
         </div>

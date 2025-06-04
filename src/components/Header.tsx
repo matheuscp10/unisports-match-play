@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { User, Search, Menu, LogOut, Settings } from "lucide-react";
@@ -73,7 +74,11 @@ const Header = ({ onSearchSport }: HeaderProps) => {
         <div className="flex items-center space-x-8">
           <div className="flex items-center">
             <div className="h-12 w-12 bg-green-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">US</span>
+              <img 
+                src="/placeholder.svg" 
+                alt="UniSports Logo" 
+                className="h-8 w-8 object-contain"
+              />
             </div>
             <span className="ml-2 text-xl font-bold text-green-600">UniSports</span>
           </div>
