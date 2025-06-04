@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, MapPin, Users, Trophy, TrendingUp, Calendar } from "lucide-react";
+import { Clock, MapPin, Users, Trophy, TrendingUp, Calendar, Share } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface MatchDetailsProps {
@@ -38,6 +38,23 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
     console.log(`Following teams: ${match.team1} and ${match.team2}`);
   };
 
+  const handleShareMatch = () => {
+    const shareUrl = `${window.location.origin}/?match=${match.id}`;
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast({
+        title: "Link Copied! 🔗",
+        description: "Match link has been copied to your clipboard. Share it with friends!",
+        duration: 3000,
+      });
+    }).catch(() => {
+      toast({
+        title: "Share Match",
+        description: `Share this match: ${match.team1} vs ${match.team2}`,
+        duration: 5000,
+      });
+    });
+  };
+
   const playerStats = [
     { name: "John Smith", team: match.team1, points: 24, assists: 8, rebounds: 6 },
     { name: "Mike Johnson", team: match.team1, points: 18, assists: 4, rebounds: 12 },
@@ -61,6 +78,14 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
             Match Details
           </CardTitle>
           <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={handleShareMatch}
+              className="text-black border-green-600 hover:bg-green-50"
+            >
+              <Share className="h-4 w-4" />
+            </Button>
             <Badge variant={match.status === "Live" ? "destructive" : "secondary"}>
               {match.status}
             </Badge>
@@ -178,7 +203,7 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
         <div className="flex gap-2 pt-4">
           <Button 
             variant="outline" 
-            className="flex-1 text-black border-green-600 hover:bg-green-50"
+            className="flex-1 text-white bg-green-700 border-green-600 hover:bg-green-800"
             onClick={handleViewStatistics}
           >
             <TrendingUp className="h-4 w-4 mr-2" />
@@ -186,7 +211,7 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
           </Button>
           <Button 
             variant="outline" 
-            className="flex-1 text-black border-green-600 hover:bg-green-50"
+            className="flex-1 text-white bg-green-700 border-green-600 hover:bg-green-800"
             onClick={handleFollowTeam}
           >
             <Calendar className="h-4 w-4 mr-2" />

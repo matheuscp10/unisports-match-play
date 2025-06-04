@@ -44,6 +44,24 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
           liveSection.scrollIntoView({ behavior: 'smooth' });
         }
       }, 100);
+    } else if (searchQuery.toLowerCase().includes("field")) {
+      // If searching for fields, scroll to fields section
+      setOpen(false);
+      setTimeout(() => {
+        const fieldsSection = document.getElementById('fields');
+        if (fieldsSection) {
+          fieldsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else if (searchQuery) {
+      // General search - scroll to live scores
+      setOpen(false);
+      setTimeout(() => {
+        const liveSection = document.getElementById('live');
+        if (liveSection) {
+          liveSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     }
   };
 
@@ -51,6 +69,27 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
     const newSport = selectedSport === sport ? "" : sport;
     setSelectedSport(newSport);
     setSearchQuery(newSport);
+  };
+
+  const handleRecentSearchClick = (search: string) => {
+    setSearchQuery(search);
+    if (search.toLowerCase().includes("field")) {
+      setOpen(false);
+      setTimeout(() => {
+        const fieldsSection = document.getElementById('fields');
+        if (fieldsSection) {
+          fieldsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      setOpen(false);
+      setTimeout(() => {
+        const liveSection = document.getElementById('live');
+        if (liveSection) {
+          liveSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
   };
 
   return (
@@ -73,6 +112,7 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1"
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <Button variant="outline">
               <Filter className="h-4 w-4" />
@@ -102,7 +142,7 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
                 <button
                   key={index}
                   className="w-full text-left p-2 rounded hover:bg-gray-100 text-sm"
-                  onClick={() => setSearchQuery(search)}
+                  onClick={() => handleRecentSearchClick(search)}
                 >
                   {search}
                 </button>
@@ -111,7 +151,7 @@ const SearchModal = ({ children, onSearchSport }: SearchModalProps) => {
           </div>
 
           <div className="flex gap-2 pt-4">
-            <Button className="flex-1" onClick={handleSearch} disabled={!selectedSport}>
+            <Button className="flex-1" onClick={handleSearch} disabled={!selectedSport && !searchQuery}>
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>

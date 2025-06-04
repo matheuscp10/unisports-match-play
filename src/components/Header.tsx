@@ -72,11 +72,10 @@ const Header = ({ onSearchSport }: HeaderProps) => {
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <div className="flex items-center">
-            <img 
-              src="/src/assets/unisports-logo.png" 
-              alt="UniSports Logo" 
-              className="h-12 w-auto"
-            />
+            <div className="h-12 w-12 bg-green-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">US</span>
+            </div>
+            <span className="ml-2 text-xl font-bold text-green-600">UniSports</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#live" className="text-black hover:text-blue-600 transition-colors font-normal">
