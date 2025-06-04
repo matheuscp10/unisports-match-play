@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -140,9 +139,9 @@ const FieldFinder = () => {
   ];
 
   const filteredFields = availableFields.filter(field => {
-    const sportMatch = !selectedSport || field.sport === selectedSport;
-    const locationMatch = !selectedLocation || field.location.includes(selectedLocation);
-    const countryMatch = !selectedCountry || field.country === selectedCountry;
+    const sportMatch = selectedSport === "all" || !selectedSport || field.sport === selectedSport;
+    const locationMatch = selectedLocation === "all" || !selectedLocation || field.location.includes(selectedLocation);
+    const countryMatch = selectedCountry === "all" || !selectedCountry || field.country === selectedCountry;
     const rangeMatch = !maxRange || !locationEnabled || field.distanceValue <= parseFloat(maxRange);
     return sportMatch && locationMatch && countryMatch && rangeMatch;
   });
@@ -215,7 +214,7 @@ const FieldFinder = () => {
                       <SelectValue placeholder="Select a sport" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Sports</SelectItem>
+                      <SelectItem value="all">All Sports</SelectItem>
                       <SelectItem value="Basketball">Basketball</SelectItem>
                       <SelectItem value="Soccer">Soccer</SelectItem>
                       <SelectItem value="Tennis">Tennis</SelectItem>
@@ -231,7 +230,7 @@ const FieldFinder = () => {
                       <SelectValue placeholder="Select a location" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Locations</SelectItem>
+                      <SelectItem value="all">All Locations</SelectItem>
                       <SelectItem value="Cambridge">Cambridge, MA</SelectItem>
                       <SelectItem value="Boston">Boston, MA</SelectItem>
                     </SelectContent>
@@ -244,7 +243,7 @@ const FieldFinder = () => {
                       <SelectValue placeholder="Select a country" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Countries</SelectItem>
+                      <SelectItem value="all">All Countries</SelectItem>
                       <SelectItem value="USA">United States</SelectItem>
                       <SelectItem value="Canada">Canada</SelectItem>
                       <SelectItem value="UK">United Kingdom</SelectItem>
