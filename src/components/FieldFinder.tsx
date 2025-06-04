@@ -367,37 +367,6 @@ const FieldFinder = () => {
           </Card>
         ))}
       </div>
-
-      {/* Quick Booking Section */}
-      <Card className="hover-scale bg-white border-green-200">
-        <CardHeader>
-          <CardTitle className="text-black">Quick Booking by Sport</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <Button variant="outline" className="h-20 flex-col hover-scale border-green-200 text-black hover:bg-green-50">
-              <div className="font-semibold">Basketball</div>
-              <div className="text-xs text-gray-600">8 courts nearby</div>
-            </Button>
-            <Button variant="outline" className="h-20 flex-col hover-scale border-green-200 text-black hover:bg-green-50">
-              <div className="font-semibold">Soccer</div>
-              <div className="text-xs text-gray-600">3 fields nearby</div>
-            </Button>
-            <Button variant="outline" className="h-20 flex-col hover-scale border-green-200 text-black hover:bg-green-50">
-              <div className="font-semibold">Tennis</div>
-              <div className="text-xs text-gray-600">12 courts nearby</div>
-            </Button>
-            <Button variant="outline" className="h-20 flex-col hover-scale border-green-200 text-black hover:bg-green-50">
-              <div className="font-semibold">Volleyball</div>
-              <div className="text-xs text-gray-600">5 courts nearby</div>
-            </Button>
-            <Button variant="outline" className="h-20 flex-col hover-scale border-green-200 text-black hover:bg-green-50">
-              <div className="font-semibold">Swimming</div>
-              <div className="text-xs text-gray-600">2 pools nearby</div>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
