@@ -7,6 +7,7 @@ import { Calendar, Search, MapPin, Navigation, Clock, Star, Check, Filter } from
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 const FieldFinder = () => {
   const { toast } = useToast();
@@ -16,6 +17,8 @@ const FieldFinder = () => {
   const [bookedFields, setBookedFields] = useState<number[]>([]);
   const [selectedSport, setSelectedSport] = useState<string>("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [maxRange, setMaxRange] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -52,9 +55,15 @@ const FieldFinder = () => {
   };
 
   const handleFilterApply = () => {
+    const activeFilters = [];
+    if (selectedSport) activeFilters.push(selectedSport);
+    if (selectedLocation) activeFilters.push(selectedLocation);
+    if (maxRange) activeFilters.push(`within ${maxRange} miles`);
+    if (selectedCountry) activeFilters.push(selectedCountry);
+    
     toast({
       title: "Filters Applied! 🔍",
-      description: `Showing ${selectedSport || 'all sports'} in ${selectedLocation || 'all locations'}`,
+      description: `Showing fields ${activeFilters.length > 0 ? `filtered by: ${activeFilters.join(', ')}` : 'with all criteria'}`,
       duration: 3000,
     });
   };
@@ -73,7 +82,9 @@ const FieldFinder = () => {
       available: "2:00 PM - 4:00 PM",
       status: "Available",
       location: "Cambridge, MA",
+      country: "USA",
       distance: locationEnabled ? "0.3 miles" : "Unknown",
+      distanceValue: 0.3,
       rating: 4.8,
       features: ["Indoor Court", "Sound System", "Scoreboard"],
       coords: { lat: 42.3601, lng: -71.0942 }
@@ -84,7 +95,9 @@ const FieldFinder = () => {
       available: "6:00 PM - 8:00 PM",
       status: "Available",
       location: "Cambridge, MA", 
+      country: "USA",
       distance: locationEnabled ? "0.7 miles" : "Unknown",
+      distanceValue: 0.7,
       rating: 4.6,
       features: ["Grass Field", "Lighting", "Bleachers"]
     },
@@ -94,7 +107,9 @@ const FieldFinder = () => {
       available: "10:00 AM - 12:00 PM",
       status: "Busy",
       location: "Cambridge, MA",
+      country: "USA",
       distance: locationEnabled ? "1.2 miles" : "Unknown",
+      distanceValue: 1.2,
       rating: 4.9,
       features: ["Hard Court", "Net", "Water Fountain"]
     },
@@ -104,7 +119,9 @@ const FieldFinder = () => {
       available: "7:00 PM - 9:00 PM",
       status: "Available",
       location: "Boston, MA",
+      country: "USA",
       distance: locationEnabled ? "2.1 miles" : "Unknown",
+      distanceValue: 2.1,
       rating: 4.5,
       features: ["Indoor Court", "Professional Net", "Heating"]
     },
@@ -114,7 +131,9 @@ const FieldFinder = () => {
       available: "5:00 AM - 10:00 PM",
       status: "Available",
       location: "Boston, MA",
+      country: "USA",
       distance: locationEnabled ? "2.8 miles" : "Unknown",
+      distanceValue: 2.8,
       rating: 4.7,
       features: ["Olympic Pool", "Diving Boards", "Locker Rooms"]
     }
@@ -123,11 +142,13 @@ const FieldFinder = () => {
   const filteredFields = availableFields.filter(field => {
     const sportMatch = !selectedSport || field.sport === selectedSport;
     const locationMatch = !selectedLocation || field.location.includes(selectedLocation);
-    return sportMatch && locationMatch;
+    const countryMatch = !selectedCountry || field.country === selectedCountry;
+    const rangeMatch = !maxRange || !locationEnabled || field.distanceValue <= parseFloat(maxRange);
+    return sportMatch && locationMatch && countryMatch && rangeMatch;
   });
 
   const sortedFields = locationEnabled 
-    ? [...filteredFields].sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance))
+    ? [...filteredFields].sort((a, b) => a.distanceValue - b.distanceValue)
     : filteredFields;
 
   const requestLocation = () => {
@@ -216,17 +237,39 @@ const FieldFinder = () => {
                     </SelectContent>
                   </Select>
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-black mb-2">Country</label>
+                  <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All Countries</SelectItem>
+                      <SelectItem value="USA">United States</SelectItem>
+                      <SelectItem value="Canada">Canada</SelectItem>
+                      <SelectItem value="UK">United Kingdom</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                {locationEnabled && (
+                  <div>
+                    <label className="block text-sm font-medium text-black mb-2">Max Distance (miles)</label>
+                    <Input
+                      type="number"
+                      placeholder="Enter max distance"
+                      value={maxRange}
+                      onChange={(e) => setMaxRange(e.target.value)}
+                      min="0"
+                      step="0.1"
+                    />
+                  </div>
+                )}
                 <Button onClick={handleFilterApply} className="w-full bg-green-700 hover:bg-green-800 text-white">
                   Apply Filters
                 </Button>
               </div>
             </DialogContent>
           </Dialog>
-          
-          <Button className="hover-scale bg-green-700 hover:bg-green-800 text-white">
-            <Calendar className="h-4 w-4 mr-2" />
-            Book Field
-          </Button>
         </div>
       </div>
 
