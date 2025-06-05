@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,14 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
         { round: "Round of 16", team1: "MIT Eagles", score1: 82, team2: "Georgetown Hoyas", score2: 78, country: "United States" },
         { round: "Round of 16", team1: "UCLA Bruins", score1: 91, team2: "Syracuse Orange", score2: 85, country: "United States" },
         { round: "Round of 16", team1: "Harvard Crimson", score1: 79, team2: "Marquette Eagles", score2: 74, country: "United States" }
-      ]
+      ],
+      bracket: {
+        semifinals: [
+          { team1: "Stanford Cardinals", team2: "UCLA Bruins", winner: "Stanford Cardinals" },
+          { team1: "Duke Blue Devils", team2: "Kentucky Wildcats", winner: "Duke Blue Devils" }
+        ],
+        final: { team1: "Stanford Cardinals", team2: "Duke Blue Devils", winner: "TBD" }
+      }
     },
     "Football (Soccer)": {
       currentRound: "Semi Finals",
@@ -90,7 +98,14 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
       pastResults: [
         { round: "Quarter Finals", team1: "Oxford Blues", score1: 2, team2: "King's Eagles", score2: 0, country: "United Kingdom" },
         { round: "Quarter Finals", team1: "Cambridge Light Blues", score1: 3, team2: "Edinburgh Scots", score2: 1, country: "United Kingdom" }
-      ]
+      ],
+      bracket: {
+        semifinals: [
+          { team1: "Oxford Blues", team2: "Cambridge Light Blues", winner: "TBD" },
+          { team1: "Imperial Lions", team2: "UCL Bears", winner: "TBD" }
+        ],
+        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
+      }
     },
     "Tennis": {
       currentRound: "Finals",
@@ -100,7 +115,14 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
       pastResults: [
         { round: "Semi Finals", team1: "Toronto Varsity Blues", score1: 6, team2: "UBC Thunderbirds", score2: 3, country: "Canada" },
         { round: "Semi Finals", team1: "McGill Redbirds", score1: 6, team2: "Alberta Golden Bears", score2: 2, country: "Canada" }
-      ]
+      ],
+      bracket: {
+        semifinals: [
+          { team1: "Toronto Varsity Blues", team2: "UBC Thunderbirds", winner: "Toronto Varsity Blues" },
+          { team1: "McGill Redbirds", team2: "Alberta Golden Bears", winner: "McGill Redbirds" }
+        ],
+        final: { team1: "Toronto Varsity Blues", team2: "McGill Redbirds", winner: "TBD" }
+      }
     },
     "Volleyball": {
       currentRound: "Quarter Finals",
@@ -111,7 +133,14 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
       pastResults: [
         { round: "Round of 16", team1: "UCLA Bruins", score1: 3, team2: "Oregon Ducks", score2: 1, country: "United States" },
         { round: "Round of 16", team1: "USC Trojans", score1: 3, team2: "Arizona Wildcats", score2: 0, country: "United States" }
-      ]
+      ],
+      bracket: {
+        semifinals: [
+          { team1: "UCLA Bruins", team2: "USC Trojans", winner: "TBD" },
+          { team1: "Stanford Cardinals", team2: "Berkeley Bears", winner: "TBD" }
+        ],
+        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
+      }
     }
   };
 
@@ -140,10 +169,83 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
     ? nationalCups[activeFilters.sport as keyof typeof nationalCups] 
     : nationalCups["Basketball"];
 
+  const BracketView = ({ bracket }: { bracket: any }) => (
+    <div className="space-y-6">
+      <div className="text-center">
+        <h4 className="text-lg font-semibold text-black mb-4">Tournament Bracket</h4>
+        
+        {/* Semifinals */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="text-center">
+            <h5 className="text-md font-semibold text-black mb-2">Semifinal 1</h5>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className={`font-semibold ${bracket.semifinals[0].winner === bracket.semifinals[0].team1 ? 'text-green-600' : 'text-black'}`}>
+                  {bracket.semifinals[0].team1}
+                </div>
+                <div className="text-gray-600">vs</div>
+                <div className={`font-semibold ${bracket.semifinals[0].winner === bracket.semifinals[0].team2 ? 'text-green-600' : 'text-black'}`}>
+                  {bracket.semifinals[0].team2}
+                </div>
+              </div>
+              {bracket.semifinals[0].winner !== "TBD" && (
+                <div className="mt-2 text-sm text-green-600 font-medium">
+                  Winner: {bracket.semifinals[0].winner}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <div className="text-center">
+            <h5 className="text-md font-semibold text-black mb-2">Semifinal 2</h5>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-center justify-between">
+                <div className={`font-semibold ${bracket.semifinals[1].winner === bracket.semifinals[1].team1 ? 'text-green-600' : 'text-black'}`}>
+                  {bracket.semifinals[1].team1}
+                </div>
+                <div className="text-gray-600">vs</div>
+                <div className={`font-semibold ${bracket.semifinals[1].winner === bracket.semifinals[1].team2 ? 'text-green-600' : 'text-black'}`}>
+                  {bracket.semifinals[1].team2}
+                </div>
+              </div>
+              {bracket.semifinals[1].winner !== "TBD" && (
+                <div className="mt-2 text-sm text-green-600 font-medium">
+                  Winner: {bracket.semifinals[1].winner}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Final */}
+        <div className="max-w-md mx-auto">
+          <h5 className="text-lg font-semibold text-black mb-2">Final</h5>
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div className={`font-semibold ${bracket.final.winner === bracket.final.team1 ? 'text-yellow-600' : 'text-black'}`}>
+                {bracket.final.team1}
+              </div>
+              <div className="text-gray-600">vs</div>
+              <div className={`font-semibold ${bracket.final.winner === bracket.final.team2 ? 'text-yellow-600' : 'text-black'}`}>
+                {bracket.final.team2}
+              </div>
+            </div>
+            {bracket.final.winner !== "TBD" && (
+              <div className="mt-2 text-sm text-yellow-600 font-medium flex items-center justify-center gap-1">
+                <Trophy className="h-4 w-4" />
+                Champion: {bracket.final.winner}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold text-black">League Statistics</h2>
+        <h2 className="text-3xl font-bold text-black">League Standings</h2>
         <Badge variant="secondary" className="animate-pulse bg-green-100 text-green-700 border-green-300">
           <Trophy className="h-3 w-3 mr-1" />
           Season 2024
@@ -210,36 +312,52 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-black">
                 <Trophy className="h-5 w-5 text-yellow-500" />
-                National University Cup - {activeFilters.sport || "Basketball"} - {currentNationalCup.currentRound}
+                National University Cup - {activeFilters.sport || "Basketball"}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <h3 className="font-semibold text-lg text-black">Upcoming Matches</h3>
-              {currentNationalCup.matches.map((match, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-center space-x-4">
-                    <div className="text-lg font-semibold text-black">{match.team1}</div>
-                    <div className="text-gray-600">vs</div>
-                    <div className="text-lg font-semibold text-black">{match.team2}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-semibold text-black">{match.date}</div>
-                    <div className="text-sm text-gray-700">{match.venue}</div>
-                  </div>
-                </div>
-              ))}
-              
-              <h3 className="font-semibold text-lg mt-6 text-black">Recent Results</h3>
-              {currentNationalCup.pastResults.map((result, index) => (
-                <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="flex items-center space-x-4">
-                    <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{result.round}</Badge>
-                    <div className="font-semibold text-black">{result.team1}</div>
-                    <div className="text-2xl font-bold text-green-600">{result.score1} - {result.score2}</div>
-                    <div className="font-semibold text-black">{result.team2}</div>
-                  </div>
-                </div>
-              ))}
+            <CardContent className="space-y-6">
+              <Tabs defaultValue="bracket" className="w-full">
+                <TabsList className="grid w-full grid-cols-3 bg-gray-100">
+                  <TabsTrigger value="bracket" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Bracket</TabsTrigger>
+                  <TabsTrigger value="upcoming" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Upcoming</TabsTrigger>
+                  <TabsTrigger value="results" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Results</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="bracket" className="mt-6">
+                  <BracketView bracket={currentNationalCup.bracket} />
+                </TabsContent>
+                
+                <TabsContent value="upcoming" className="mt-6">
+                  <h3 className="font-semibold text-lg text-black mb-4">Upcoming Matches - {currentNationalCup.currentRound}</h3>
+                  {currentNationalCup.matches.map((match, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                      <div className="flex items-center space-x-4">
+                        <div className="text-lg font-semibold text-black">{match.team1}</div>
+                        <div className="text-gray-600">vs</div>
+                        <div className="text-lg font-semibold text-black">{match.team2}</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-semibold text-black">{match.date}</div>
+                        <div className="text-sm text-gray-700">{match.venue}</div>
+                      </div>
+                    </div>
+                  ))}
+                </TabsContent>
+                
+                <TabsContent value="results" className="mt-6">
+                  <h3 className="font-semibold text-lg text-black mb-4">Recent Results</h3>
+                  {currentNationalCup.pastResults.map((result, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="flex items-center space-x-4">
+                        <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{result.round}</Badge>
+                        <div className="font-semibold text-black">{result.team1}</div>
+                        <div className="text-2xl font-bold text-green-600">{result.score1} - {result.score2}</div>
+                        <div className="font-semibold text-black">{result.team2}</div>
+                      </div>
+                    </div>
+                  ))}
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </TabsContent>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,8 +16,8 @@ const Index = () => {
 
   // Realistic numbers based on actual data
   const liveMatchesCount = 5; // Based on the live matches we have
-  const availableFieldsCount = 8; // Realistic number for a university
-  const activePlayersCount = 47; // Reasonable number for active players
+  const availableFieldsCount = 5; // Realistic number for a university
+  const activePlayersCount = 48; // Reasonable number for active players
 
   const scrollToSection = (sectionId: string) => {
     setActiveTab(sectionId);
