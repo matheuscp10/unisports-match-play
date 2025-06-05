@@ -83,7 +83,7 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
               variant="outline" 
               size="sm"
               onClick={handleShareMatch}
-              className="text-black border-green-600 hover:bg-green-50"
+              className="text-white bg-black border-black hover:bg-gray-800"
             >
               <Share className="h-4 w-4" />
             </Button>

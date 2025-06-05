@@ -15,6 +15,11 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("live");
   const [searchedSport, setSearchedSport] = useState<string>("");
 
+  // Realistic numbers based on actual data
+  const liveMatchesCount = 5; // Based on the live matches we have
+  const availableFieldsCount = 8; // Realistic number for a university
+  const activePlayersCount = 47; // Reasonable number for active players
+
   const scrollToSection = (sectionId: string) => {
     setActiveTab(sectionId);
     const element = document.getElementById(sectionId);
@@ -84,7 +89,7 @@ const Index = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-600">12</div>
+              <div className="text-2xl font-bold text-blue-600">{liveMatchesCount}</div>
               <p className="text-sm text-black">Currently playing</p>
             </CardContent>
           </Card>
@@ -97,7 +102,7 @@ const Index = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">47</div>
+              <div className="text-2xl font-bold text-green-600">{availableFieldsCount}</div>
               <p className="text-sm text-black">Ready to book</p>
             </CardContent>
           </Card>
@@ -110,7 +115,7 @@ const Index = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-purple-600">284</div>
+              <div className="text-2xl font-bold text-purple-600">{activePlayersCount}</div>
               <p className="text-sm text-black">Looking for matches</p>
             </CardContent>
           </Card>
@@ -162,19 +167,19 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="hover-scale cursor-pointer">
-              <div className="text-3xl font-bold text-green-400">2,847</div>
+              <div className="text-3xl font-bold text-green-400">{activePlayersCount}</div>
               <div className="text-gray-300">Active Players</div>
             </div>
             <div className="hover-scale cursor-pointer">
-              <div className="text-3xl font-bold text-blue-400">156</div>
+              <div className="text-3xl font-bold text-blue-400">{availableFieldsCount}</div>
               <div className="text-gray-300">Available Fields</div>
             </div>
             <div className="hover-scale cursor-pointer">
-              <div className="text-3xl font-bold text-yellow-400">89</div>
+              <div className="text-3xl font-bold text-yellow-400">{liveMatchesCount}</div>
               <div className="text-gray-300">Live Matches</div>
             </div>
             <div className="hover-scale cursor-pointer">
-              <div className="text-3xl font-bold text-purple-400">23</div>
+              <div className="text-3xl font-bold text-purple-400">3</div>
               <div className="text-gray-300">Universities</div>
             </div>
           </div>
