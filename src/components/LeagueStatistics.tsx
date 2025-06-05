@@ -68,78 +68,77 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
 
   const nationalCups = {
     "Basketball": {
-      currentRound: "Quarter Finals",
+      currentRound: "Semi Finals",
       matches: [
-        { team1: "Stanford Cardinals", team2: "MIT Eagles", date: "March 15", venue: "Madison Square Garden", country: "United States" },
-        { team1: "UCLA Bruins", team2: "Harvard Crimson", date: "March 15", venue: "United Center", country: "United States" },
-        { team1: "Duke Blue Devils", team2: "North Carolina", date: "March 16", venue: "Staples Center", country: "United States" },
-        { team1: "Kentucky Wildcats", team2: "Kansas Jayhawks", date: "March 16", venue: "TD Garden", country: "United States" }
+        { team1: "Stanford Cardinals", team2: "MIT Eagles", date: "March 25", venue: "Madison Square Garden", country: "United States" },
+        { team1: "UCLA Bruins", team2: "Harvard Crimson", date: "March 25", venue: "United Center", country: "United States" }
       ],
       pastResults: [
-        { round: "Round of 16", team1: "Stanford Cardinals", score1: 89, team2: "Villanova Wildcats", score2: 76, country: "United States" },
-        { round: "Round of 16", team1: "MIT Eagles", score1: 82, team2: "Georgetown Hoyas", score2: 78, country: "United States" },
-        { round: "Round of 16", team1: "UCLA Bruins", score1: 91, team2: "Syracuse Orange", score2: 85, country: "United States" },
-        { round: "Round of 16", team1: "Harvard Crimson", score1: 79, team2: "Marquette Eagles", score2: 74, country: "United States" }
+        { round: "Quarter Finals", team1: "Stanford Cardinals", score1: 89, team2: "Villanova Wildcats", score2: 76, country: "United States" },
+        { round: "Quarter Finals", team1: "MIT Eagles", score1: 82, team2: "Georgetown Hoyas", score2: 78, country: "United States" },
+        { round: "Quarter Finals", team1: "UCLA Bruins", score1: 91, team2: "Syracuse Orange", score2: 85, country: "United States" },
+        { round: "Quarter Finals", team1: "Harvard Crimson", score1: 79, team2: "Marquette Eagles", score2: 74, country: "United States" }
       ],
       bracket: {
         semifinals: [
-          { team1: "Stanford Cardinals", team2: "UCLA Bruins", winner: "Stanford Cardinals" },
-          { team1: "Duke Blue Devils", team2: "Kentucky Wildcats", winner: "Duke Blue Devils" }
+          { team1: "Stanford Cardinals", team2: "MIT Eagles", winner: "TBD" },
+          { team1: "UCLA Bruins", team2: "Harvard Crimson", winner: "TBD" }
         ],
-        final: { team1: "Stanford Cardinals", team2: "Duke Blue Devils", winner: "TBD" }
+        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
       }
     },
     "Football (Soccer)": {
-      currentRound: "Semi Finals",
+      currentRound: "Finals",
       matches: [
-        { team1: "Oxford Blues", team2: "Cambridge Light Blues", date: "April 20", venue: "Wembley Stadium", country: "United Kingdom" },
-        { team1: "Imperial Lions", team2: "UCL Bears", date: "April 20", venue: "Old Trafford", country: "United Kingdom" }
+        { team1: "Oxford Blues", team2: "Cambridge Light Blues", date: "April 20", venue: "Wembley Stadium", country: "United Kingdom" }
       ],
       pastResults: [
-        { round: "Quarter Finals", team1: "Oxford Blues", score1: 2, team2: "King's Eagles", score2: 0, country: "United Kingdom" },
-        { round: "Quarter Finals", team1: "Cambridge Light Blues", score1: 3, team2: "Edinburgh Scots", score2: 1, country: "United Kingdom" }
+        { round: "Semi Finals", team1: "Oxford Blues", score1: 2, team2: "Imperial Lions", score2: 0, country: "United Kingdom" },
+        { round: "Semi Finals", team1: "Cambridge Light Blues", score1: 3, team2: "UCL Bears", score2: 1, country: "United Kingdom" }
       ],
       bracket: {
         semifinals: [
-          { team1: "Oxford Blues", team2: "Cambridge Light Blues", winner: "TBD" },
-          { team1: "Imperial Lions", team2: "UCL Bears", winner: "TBD" }
+          { team1: "Oxford Blues", team2: "Imperial Lions", winner: "Oxford Blues" },
+          { team1: "Cambridge Light Blues", team2: "UCL Bears", winner: "Cambridge Light Blues" }
         ],
-        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
+        final: { team1: "Oxford Blues", team2: "Cambridge Light Blues", winner: "TBD" }
       }
     },
     "Tennis": {
-      currentRound: "Finals",
+      currentRound: "Quarter Finals",
       matches: [
-        { team1: "Toronto Varsity Blues", team2: "McGill Redbirds", date: "May 15", venue: "Rogers Cup Centre", country: "Canada" }
+        { team1: "Toronto Varsity Blues", team2: "McGill Redbirds", date: "May 10", venue: "Rogers Cup Centre", country: "Canada" },
+        { team1: "UBC Thunderbirds", team2: "Alberta Golden Bears", date: "May 10", venue: "Pacific Coliseum", country: "Canada" }
       ],
       pastResults: [
-        { round: "Semi Finals", team1: "Toronto Varsity Blues", score1: 6, team2: "UBC Thunderbirds", score2: 3, country: "Canada" },
-        { round: "Semi Finals", team1: "McGill Redbirds", score1: 6, team2: "Alberta Golden Bears", score2: 2, country: "Canada" }
+        { round: "Round of 16", team1: "Toronto Varsity Blues", score1: 6, team2: "McMaster Marauders", score2: 2, country: "Canada" },
+        { round: "Round of 16", team1: "McGill Redbirds", score1: 6, team2: "Western Mustangs", score2: 3, country: "Canada" },
+        { round: "Round of 16", team1: "UBC Thunderbirds", score1: 6, team2: "Calgary Dinos", score2: 4, country: "Canada" },
+        { round: "Round of 16", team1: "Alberta Golden Bears", score1: 6, team2: "Saskatchewan Huskies", score2: 1, country: "Canada" }
       ],
       bracket: {
         semifinals: [
-          { team1: "Toronto Varsity Blues", team2: "UBC Thunderbirds", winner: "Toronto Varsity Blues" },
-          { team1: "McGill Redbirds", team2: "Alberta Golden Bears", winner: "McGill Redbirds" }
+          { team1: "TBD", team2: "TBD", winner: "TBD" },
+          { team1: "TBD", team2: "TBD", winner: "TBD" }
         ],
-        final: { team1: "Toronto Varsity Blues", team2: "McGill Redbirds", winner: "TBD" }
+        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
       }
     },
     "Volleyball": {
-      currentRound: "Quarter Finals",
+      currentRound: "Finals",
       matches: [
-        { team1: "UCLA Bruins", team2: "USC Trojans", date: "March 25", venue: "Pauley Pavilion", country: "United States" },
-        { team1: "Stanford Cardinals", team2: "Berkeley Bears", date: "March 25", venue: "Maples Pavilion", country: "United States" }
+        { team1: "UCLA Bruins", team2: "Stanford Cardinals", date: "March 30", venue: "Pauley Pavilion", country: "United States" }
       ],
       pastResults: [
-        { round: "Round of 16", team1: "UCLA Bruins", score1: 3, team2: "Oregon Ducks", score2: 1, country: "United States" },
-        { round: "Round of 16", team1: "USC Trojans", score1: 3, team2: "Arizona Wildcats", score2: 0, country: "United States" }
+        { round: "Semi Finals", team1: "UCLA Bruins", score1: 3, team2: "USC Trojans", score2: 1, country: "United States" },
+        { round: "Semi Finals", team1: "Stanford Cardinals", score1: 3, team2: "Berkeley Bears", score2: 0, country: "United States" }
       ],
       bracket: {
         semifinals: [
-          { team1: "UCLA Bruins", team2: "USC Trojans", winner: "TBD" },
-          { team1: "Stanford Cardinals", team2: "Berkeley Bears", winner: "TBD" }
+          { team1: "UCLA Bruins", team2: "USC Trojans", winner: "UCLA Bruins" },
+          { team1: "Stanford Cardinals", team2: "Berkeley Bears", winner: "Stanford Cardinals" }
         ],
-        final: { team1: "TBD", team2: "TBD", winner: "TBD" }
+        final: { team1: "UCLA Bruins", team2: "Stanford Cardinals", winner: "TBD" }
       }
     }
   };
@@ -165,9 +164,27 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
   };
 
   const filteredLeagues = filterLeagues();
-  const currentNationalCup = activeFilters.sport && nationalCups[activeFilters.sport as keyof typeof nationalCups] 
-    ? nationalCups[activeFilters.sport as keyof typeof nationalCups] 
-    : nationalCups["Basketball"];
+  
+  // Get the correct national cup data - only show if the sport exists in our data
+  const getCorrectNationalCup = () => {
+    if (activeFilters.sport && nationalCups[activeFilters.sport as keyof typeof nationalCups]) {
+      return {
+        sport: activeFilters.sport,
+        data: nationalCups[activeFilters.sport as keyof typeof nationalCups]
+      };
+    }
+    // Default to Basketball if no filter is applied
+    if (!activeFilters.sport) {
+      return {
+        sport: "Basketball",
+        data: nationalCups["Basketball"]
+      };
+    }
+    // Return null if filtered sport doesn't exist in our cup data
+    return null;
+  };
+
+  const currentNationalCup = getCorrectNationalCup();
 
   const BracketView = ({ bracket }: { bracket: any }) => (
     <div className="space-y-6">
@@ -308,58 +325,64 @@ const LeagueStatistics = ({ activeFilters = { country: "", university: "", sport
         </TabsContent>
 
         <TabsContent value="national" className="space-y-6">
-          <Card className="hover-scale bg-white border-green-700/50">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-black">
-                <Trophy className="h-5 w-5 text-yellow-500" />
-                National University Cup - {activeFilters.sport || "Basketball"}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <Tabs defaultValue="bracket" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 bg-gray-100">
-                  <TabsTrigger value="bracket" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Bracket</TabsTrigger>
-                  <TabsTrigger value="upcoming" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Upcoming</TabsTrigger>
-                  <TabsTrigger value="results" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Results</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="bracket" className="mt-6">
-                  <BracketView bracket={currentNationalCup.bracket} />
-                </TabsContent>
-                
-                <TabsContent value="upcoming" className="mt-6">
-                  <h3 className="font-semibold text-lg text-black mb-4">Upcoming Matches - {currentNationalCup.currentRound}</h3>
-                  {currentNationalCup.matches.map((match, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
-                      <div className="flex items-center space-x-4">
-                        <div className="text-lg font-semibold text-black">{match.team1}</div>
-                        <div className="text-gray-600">vs</div>
-                        <div className="text-lg font-semibold text-black">{match.team2}</div>
+          {currentNationalCup ? (
+            <Card className="hover-scale bg-white border-green-700/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-black">
+                  <Trophy className="h-5 w-5 text-yellow-500" />
+                  National University Cup - {currentNationalCup.sport}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <Tabs defaultValue="bracket" className="w-full">
+                  <TabsList className="grid w-full grid-cols-3 bg-gray-100">
+                    <TabsTrigger value="bracket" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Bracket</TabsTrigger>
+                    <TabsTrigger value="upcoming" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Upcoming</TabsTrigger>
+                    <TabsTrigger value="results" className="data-[state=active]:bg-green-800 data-[state=active]:text-white text-black">Results</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="bracket" className="mt-6">
+                    <BracketView bracket={currentNationalCup.data.bracket} />
+                  </TabsContent>
+                  
+                  <TabsContent value="upcoming" className="mt-6">
+                    <h3 className="font-semibold text-lg text-black mb-4">Upcoming Matches - {currentNationalCup.data.currentRound}</h3>
+                    {currentNationalCup.data.matches.map((match, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="flex items-center space-x-4">
+                          <div className="text-lg font-semibold text-black">{match.team1}</div>
+                          <div className="text-gray-600">vs</div>
+                          <div className="text-lg font-semibold text-black">{match.team2}</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-semibold text-black">{match.date}</div>
+                          <div className="text-sm text-gray-700">{match.venue}</div>
+                        </div>
                       </div>
-                      <div className="text-right">
-                        <div className="font-semibold text-black">{match.date}</div>
-                        <div className="text-sm text-gray-700">{match.venue}</div>
+                    ))}
+                  </TabsContent>
+                  
+                  <TabsContent value="results" className="mt-6">
+                    <h3 className="font-semibold text-lg text-black mb-4">Recent Results</h3>
+                    {currentNationalCup.data.pastResults.map((result, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div className="flex items-center space-x-4">
+                          <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{result.round}</Badge>
+                          <div className="font-semibold text-black">{result.team1}</div>
+                          <div className="text-2xl font-bold text-green-600">{result.score1} - {result.score2}</div>
+                          <div className="font-semibold text-black">{result.team2}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </TabsContent>
-                
-                <TabsContent value="results" className="mt-6">
-                  <h3 className="font-semibold text-lg text-black mb-4">Recent Results</h3>
-                  {currentNationalCup.pastResults.map((result, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="flex items-center space-x-4">
-                        <Badge variant="outline" className="border-green-700/50 text-green-700 bg-green-50">{result.round}</Badge>
-                        <div className="font-semibold text-black">{result.team1}</div>
-                        <div className="text-2xl font-bold text-green-600">{result.score1} - {result.score2}</div>
-                        <div className="font-semibold text-black">{result.team2}</div>
-                      </div>
-                    </div>
-                  ))}
-                </TabsContent>
-              </Tabs>
-            </CardContent>
-          </Card>
+                    ))}
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="text-center text-black py-8 bg-white/80 rounded border border-green-200">
+              No national cup data available for the selected sport.
+            </div>
+          )}
         </TabsContent>
       </Tabs>
     </div>
