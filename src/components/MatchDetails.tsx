@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -86,10 +87,10 @@ const MatchDetails = ({ match }: MatchDetailsProps) => {
             >
               <Share className="h-4 w-4" />
             </Button>
-            <Badge variant={match.status === "Live" ? "destructive" : "secondary"}>
+            <Badge variant={match.status === "Live" ? "destructive" : "secondary"} className="text-black">
               {match.status}
             </Badge>
-            <Badge variant="outline">{match.sport}</Badge>
+            <Badge variant="outline" className="text-black border-black">{match.sport}</Badge>
           </div>
         </div>
       </CardHeader>
